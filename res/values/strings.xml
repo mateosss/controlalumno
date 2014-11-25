@@ -1,0 +1,24 @@
+<resources>
+
+    <string-array name="items_array">
+        <item>All Courses</item>
+        <item>Last Course</item>
+        <item>Last Alumn</item>
+    </string-array>
+
+    <string name="drawer_open">Open navigation drawer</string>
+    <string name="drawer_close">Close navigation drawer</string>
+    <string name="action_websearch">Web search</string>
+    <string name="app_not_available">Sorry, there\'s no web browser available</string>
+    <string name="app_name">Nav</string>
+    <string name="all_courses">All Courses</string>
+    <string name="last_course">Last Course</string>
+    <string name="last_alumn">Last Alumn</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="action_search">Search</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_add_nota">AddNota</string>
+    <string name="hello_world">Hello world!</string>
+
+</resources>

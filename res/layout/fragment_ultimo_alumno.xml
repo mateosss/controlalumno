@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical" >
+
+    <TextView
+        android:id="@+id/TIInfoBasica"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Información Básica"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <TextView
+        android:id="@+id/alumno"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Último Alumno" />
+
+    <TextView
+        android:id="@+id/notamax"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Nota Máxima" />
+
+    <TextView
+        android:id="@+id/notamin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Nota Mínima" />
+
+    <TextView
+        android:id="@+id/estado"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="41dp"
+        android:text="Estado General" />
+
+    <TextView
+        android:id="@+id/promedio"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Promedio" />
+
+    <TextView
+        android:id="@+id/TIGraficoNotas"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Gráfico de Notas"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <Button
+        android:id="@+id/grafico"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="mostrarGrafico"
+        android:text="Ver Gráfico" />
+
+    <TextView
+        android:id="@+id/TIhistorialdenotas"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Historial de Notas"
+        android:textAppearance="?android:attr/textAppearanceLarge" >
+    </TextView>
+
+    <ListView
+        android:id="@+id/historial"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+    </ListView>
+
+</LinearLayout>

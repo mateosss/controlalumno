@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <color name="spark_blue">#0099cc</color>
+    <color name="dark_spark_blue">#006a8d</color>
+    <color name="light_spark_blue">#33b5e5</color>
+    <color name="background">#e6e6e6</color>
+    <color name="select_blue">#006a8d</color>
+    <color name="white">#ffffff</color>
+    <color name="black">#000000</color>
+    <color name="light_red">#ff4444</color>
+    <color name="dark_red">#cc0000</color>
+    <color name="light_orange">#ffbb33</color>
+    <color name="dark_orange">#ff8800</color>
+    <color name="light_blue">#33b5e5</color>
+    <color name="dark_blue">#0099cc</color>
+    <color name="light_purple">#aa66cc</color>
+    <color name="dark_purple">#9933cc</color>
+    <color name="light_green">#99cc00</color>
+    <color name="dark_green">#669900</color>
+
+</resources>

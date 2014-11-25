@@ -1,0 +1,14 @@
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <style name="AppBaseTheme" parent="android:Theme.Holo.Light.DarkActionBar">
+        <item name="android:actionBarStyle">@style/ActionBar</item>
+    </style>
+
+    <style name="ActionBar" parent="@android:style/Widget.Holo.Light.ActionBar.Solid.Inverse">
+        <item name="android:background">@color/spark_blue</item>
+        <item name="android:backgroundStacked">@color/light_orange</item>
+        <item name="android:backgroundSplit">@color/light_purple</item>
+        <item name="android:windowActionBarOverlay">true</item>
+    </style>
+
+</resources>
