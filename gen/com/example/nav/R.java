@@ -79,19 +79,22 @@ public final class R {
         public static final int TIUltimoCurso=0x7f0a0013;
         public static final int TIhistorialdenotas=0x7f0a0011;
         public static final int aceptarNotas=0x7f0a0019;
-        public static final int action_add=0x7f0a001f;
-        public static final int action_export=0x7f0a0022;
-        public static final int action_mail=0x7f0a0023;
-        public static final int action_settings=0x7f0a0021;
-        public static final int action_websearch=0x7f0a0020;
+        public static final int action_add=0x7f0a0023;
+        public static final int action_export=0x7f0a0026;
+        public static final int action_mail=0x7f0a0027;
+        public static final int action_search=0x7f0a0028;
+        public static final int action_settings=0x7f0a0025;
+        public static final int action_websearch=0x7f0a0024;
         public static final int add=0x7f0a0017;
         public static final int alumno=0x7f0a000a;
         public static final int alumnos=0x7f0a0014;
+        public static final int alumnosSearch=0x7f0a001f;
         public static final int cancelarNotas=0x7f0a0018;
-        public static final int config=0x7f0a001e;
+        public static final int config=0x7f0a0022;
         public static final int container=0x7f0a001a;
         public static final int contenedor=0x7f0a0001;
         public static final int cursos=0x7f0a0008;
+        public static final int cursosSearch=0x7f0a0021;
         public static final int estado=0x7f0a000d;
         public static final int grafico=0x7f0a0010;
         public static final int historial=0x7f0a0012;
@@ -108,6 +111,8 @@ public final class R {
         public static final int otraObservacion=0x7f0a0006;
         public static final int promedio=0x7f0a000e;
         public static final int remove=0x7f0a001d;
+        public static final int searchAlumnosTI=0x7f0a001e;
+        public static final int searchCursosTI=0x7f0a0020;
         public static final int textin=0x7f0a0016;
     }
     public static final class layout {
@@ -123,11 +128,13 @@ public final class R {
         public static final int grafico=0x7f030009;
         public static final int notas_edit=0x7f03000a;
         public static final int row=0x7f03000b;
-        public static final int settings=0x7f03000c;
+        public static final int search=0x7f03000c;
+        public static final int settings=0x7f03000d;
     }
     public static final class menu {
         public static final int main=0x7f090000;
         public static final int menu_settings=0x7f090001;
+        public static final int search=0x7f090002;
     }
     public static final class string {
         public static final int action_search=0x7f07000a;

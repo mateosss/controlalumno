@@ -33,6 +33,8 @@ import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.SearchView;
+import android.widget.SearchView.OnQueryTextListener;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -41,7 +43,6 @@ public class MainActivity extends Activity {
 	private DrawerLayout dondeDibujar;
 	private ListView listaNavDraw;
 	private ActionBarDrawerToggle navDrawToggle;
-	private boolean firsTime = true;
 	private CharSequence tituloDelLienzo;
 	private CharSequence tituloDelMenu;
 	private String[] itemsNavDraw;
@@ -199,12 +200,14 @@ public class MainActivity extends Activity {
 	}
 
 	public void refresh(int tipo) {
+
 		String[] listaString = null;
 		ListView lista = null;
 
-		if (firsTime) {
+		if (Properties.isFirsTime()) {
 			syncProperties();
-			firsTime = false;
+			Properties.setFirsTime(false);
+
 		}
 
 		if (tipo == 0) {
@@ -231,9 +234,7 @@ public class MainActivity extends Activity {
 							.replace(R.id.contenedor, fragment).commit();
 					listaNavDraw.setItemChecked(1, true);
 					lastCourse = cursos[position];
-					if (!lastCourse.hasAlumno(lastAlumn)) {
-						lastAlumn = null;
-					}
+
 					getActionBar().setTitle(cursos[position].getCurso());
 					toast(cursos[position].getCurso());
 				}
@@ -437,7 +438,6 @@ public class MainActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-		System.out.println("pato");
 		Properties.load();
 
 		tituloDelMenu = tituloDelLienzo = getTitle();
@@ -517,6 +517,7 @@ public class MainActivity extends Activity {
 	public boolean onCreateOptionsMenu(Menu menu) {
 		MenuInflater inflater = getMenuInflater();
 		inflater.inflate(R.menu.main, menu);
+
 		if (((String) getActionBar().getTitle())
 				.equalsIgnoreCase("All Courses")) {
 			refresh(0);
@@ -571,23 +572,10 @@ public class MainActivity extends Activity {
 		// Handle action buttons
 		switch (item.getItemId()) {
 		case R.id.action_websearch:
-			if (((String) getActionBar().getTitle())
-					.equalsIgnoreCase("All Courses")) {
-				refresh(0);
-				toast("refresh 0");
-			}
-			if (((String) getActionBar().getTitle())
-					.equalsIgnoreCase("Last Course")) {
-				refresh(1);
-				toast("refresh 2");
-			}
-			if (((String) getActionBar().getTitle())
-					.equalsIgnoreCase("Last Alumn")) {
-				refresh(2);
-				toast("refresh 3");
-			}
-			return true;
+			Intent intent = new Intent(this, Search.class);
+			startActivity(intent);
 
+			return true;
 		case R.id.action_settings:
 			openSettings(false);
 			return true;
@@ -746,7 +734,6 @@ public class MainActivity extends Activity {
 			// Use the Builder class for convenient dialog construction
 			AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 			LayoutInflater inflater = getActivity().getLayoutInflater();
-			System.out.println("LLEGAMOMPIBE");
 			final View agregarCursoDialog = inflater.inflate(
 					R.layout.add_dialog, null);
 

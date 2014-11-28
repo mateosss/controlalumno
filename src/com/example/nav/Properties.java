@@ -18,8 +18,25 @@ public abstract class Properties {
 			"Agrega el sufijo ossio , ej: \"Sanchossio\"" };
 	static private int[] notas = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
 	static public String mail;
-
+	static int seleccion = 0;
+	static public boolean firsTime = true;
 	static boolean openNota = false;
+
+	public static int getSeleccion() {
+		return seleccion;
+	}
+
+	public static void setSeleccion(int seleccion) {
+		Properties.seleccion = seleccion;
+	}
+
+	public static boolean isFirsTime() {
+		return firsTime;
+	}
+
+	public static void setFirsTime(boolean firsTime) {
+		Properties.firsTime = firsTime;
+	}
 
 	public static boolean isOpenNota() {
 		return openNota;

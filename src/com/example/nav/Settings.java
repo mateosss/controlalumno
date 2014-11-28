@@ -1,7 +1,5 @@
 package com.example.nav;
 
-import org.w3c.dom.Notation;
-
 import android.animation.LayoutTransition;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -30,7 +28,7 @@ public class Settings extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.settings);
-		getActionBar().setDisplayHomeAsUpEnabled(true);
+		getActionBar().setDisplayHomeAsUpEnabled(false);
 		
 		if (Properties.isOpenNota()) {
 			Properties.setOpenNota(false);
