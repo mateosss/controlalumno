@@ -5,6 +5,7 @@
     <color name="dark_spark_blue">#006a8d</color>
     <color name="light_spark_blue">#33b5e5</color>
     <color name="background">#e6e6e6</color>
+    <color name="dark_background">#d5d5d5</color>
     <color name="select_blue">#006a8d</color>
     <color name="white">#ffffff</color>
     <color name="black">#000000</color>

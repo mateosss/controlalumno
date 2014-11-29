@@ -8,44 +8,37 @@ import com.androidplot.xy.SimpleXYSeries;
 import com.androidplot.xy.XYPlot;
 import com.androidplot.xy.XYSeries;
 
-import android.app.Activity;
+import android.app.ActionBar;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
-import android.app.Fragment;
 import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.res.Configuration;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.support.v4.app.ActionBarDrawerToggle;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.DrawerLayout;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.SearchView;
-import android.widget.SearchView.OnQueryTextListener;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class MainActivity extends Activity {
-	private DrawerLayout dondeDibujar;
-	private ListView listaNavDraw;
-	private ActionBarDrawerToggle navDrawToggle;
-	private CharSequence tituloDelLienzo;
-	private CharSequence tituloDelMenu;
-	private String[] itemsNavDraw;
+public class MainActivity extends FragmentActivity {
+	ViewPager Tab;
+	TabPagerAdapter TabAdapter;
+	ActionBar actionBar;
+	CharSequence tituloDelMenu;
 
 	private Curso[] cursos = new Curso[0];
 	private Curso lastCourse = null;
@@ -104,20 +97,20 @@ public class MainActivity extends Activity {
 
 	}
 
-	public void addAlumnoEvent(View view) {
+	public void addAlumnoEvent() {
 		agregarAlumnoDialogo dialogo = new agregarAlumnoDialogo();
 		FragmentManager fragmentManager = getFragmentManager();
 		dialogo.show(fragmentManager, "Agregar Alumno");
 	}
 
-	public void addNotaEvent(View view) {
+	public void addNotaEvent() {
 		agregarNotaDialogo dialogo = new agregarNotaDialogo();
 		FragmentManager fragmentManager = getFragmentManager();
 		dialogo.show(fragmentManager, "Agregar Nota");
 
 	}
 
-	public void addCursoEvent(View view) {
+	public void addCursoEvent() {
 		agregarCursoDialogo dialogo = new agregarCursoDialogo();
 		FragmentManager fragmentManager = getFragmentManager();
 		dialogo.show(fragmentManager, "Agregar Curso");
@@ -158,7 +151,6 @@ public class MainActivity extends Activity {
 	public boolean addNota(Nota nota, Alumno alumno, Curso curso) {
 
 		for (int i = 0; i < cursos.length; i++) {
-			toast(cursos[i].getCurso());
 			if (cursos[i].getCurso().equalsIgnoreCase((curso.getCurso()))) {
 				for (int j = 0; j < cursos[i].getAlumnos().length; j++) {
 					if (cursos[i].getAlumnos()[j].getNombre().equalsIgnoreCase(
@@ -200,11 +192,15 @@ public class MainActivity extends Activity {
 	}
 
 	public void refresh(int tipo) {
-
+		System.out.println("REFRESH");
 		String[] listaString = null;
 		ListView lista = null;
 
 		if (Properties.isFirsTime()) {
+			System.out.println("TIPO ES " + tipo + " y SELECCION ES "
+					+ Properties.getSeleccion());
+			tipo = Properties.getSeleccion();
+			Tab.setCurrentItem(tipo);
 			syncProperties();
 			Properties.setFirsTime(false);
 
@@ -217,6 +213,10 @@ public class MainActivity extends Activity {
 				listaString[i] = cursos[i].getCurso();
 			}
 			lista = (ListView) findViewById(R.id.cursos);
+			if (lista == null) {
+				System.out.println("lista es null");
+
+			}
 			ArrayAdapter<String> adaptador = new ArrayAdapter<String>(this,
 					android.R.layout.simple_list_item_1, listaString);
 			lista.setAdapter(adaptador);
@@ -225,18 +225,12 @@ public class MainActivity extends Activity {
 				@Override
 				public void onItemClick(AdapterView<?> arg0, View arg1,
 						int position, long arg3) {
-					Fragment fragment = new VistaFragment();
-					Bundle args = new Bundle();
-					args.putInt(VistaFragment.ARG_ITEM_NUMBER, 1);
-					fragment.setArguments(args);
-					FragmentManager fragmentManager = getFragmentManager();
-					fragmentManager.beginTransaction()
-							.replace(R.id.contenedor, fragment).commit();
-					listaNavDraw.setItemChecked(1, true);
 					lastCourse = cursos[position];
 
+					Tab.setCurrentItem(1);
+
 					getActionBar().setTitle(cursos[position].getCurso());
-					toast(cursos[position].getCurso());
+					refresh(1);
 				}
 			});
 			lista.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
@@ -284,20 +278,13 @@ public class MainActivity extends Activity {
 						@Override
 						public void onItemClick(AdapterView<?> arg0, View arg1,
 								int position, long arg3) {
-							Fragment fragment = new VistaFragment();
-							Bundle args = new Bundle();
-							args.putInt(VistaFragment.ARG_ITEM_NUMBER, 2);
-							fragment.setArguments(args);
-							FragmentManager fragmentManager = getFragmentManager();
-							fragmentManager.beginTransaction()
-									.replace(R.id.contenedor, fragment)
-									.commit();
-							listaNavDraw.setItemChecked(2, true);
 							lastAlumn = lastCourse.getAlumnos()[position];
+							Tab.setCurrentItem(2);
 							getActionBar().setTitle(
 									lastCourse.getAlumnos()[position]
 											.getNombre());
 							toast(lastCourse.getAlumnos()[position].getNombre());
+							refresh(2);
 
 						}
 					});
@@ -435,82 +422,89 @@ public class MainActivity extends Activity {
 	}
 
 	@Override
+	protected void onResume() {
+		System.out.println("RESUMIDO GUACHO");
+		refresh(Tab.getCurrentItem());
+		super.onResume();
+	}
+
+	@Override
 	protected void onCreate(Bundle savedInstanceState) {
+
+		Properties.load();
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-		Properties.load();
 
-		tituloDelMenu = tituloDelLienzo = getTitle();
-		itemsNavDraw = getResources().getStringArray(R.array.items_array);// Array
-																			// de
-																			// Strings
-		dondeDibujar = (DrawerLayout) findViewById(R.id.lienzo);// El drawer
-																// layout,
-																// container
-																// contenedor
-																// del activity
-																// layout
-		listaNavDraw = (ListView) findViewById(R.id.listaNavDraw);// el listView
-																	// del
-																	// Activity
-																	// layout
-		dondeDibujar.setDrawerShadow(R.drawable.drawer_shadow,
-				GravityCompat.START);// Sombrita del navdraw
-		listaNavDraw.setAdapter(new ArrayAdapter<String>(this,
-				R.layout.drawer_list_item, itemsNavDraw));// Mete el texto en el
-															// navDraw
-		listaNavDraw.setOnItemClickListener(new DrawerItemClickListener());// Hace
-																			// que
-																			// cuando
-																			// tocas
-																			// algo
-		// se abra el layout y se esconda el navdraw
-		getActionBar().setDisplayHomeAsUpEnabled(true);// tocas icono y sale el
-														// nav Draw
-		getActionBar().setHomeButtonEnabled(true);// ademas del icono de las 3
-													// barritas
+		TabAdapter = new TabPagerAdapter(getSupportFragmentManager());
 
-		// crea la interaccion entre el icono y que se abra el navdraw
-		navDrawToggle = new ActionBarDrawerToggle(this, /* host Activity */
-		dondeDibujar, /* DrawerLayout object */
-		R.drawable.ic_drawer, /* nav drawer image to replace 'Up' caret */
-		R.string.drawer_open, /* "open drawer" description for accessibility */
-		R.string.drawer_close /* "close drawer" description for accessibility */
-		) {
-			public void onDrawerClosed(View view) {
-				getActionBar().setTitle(tituloDelMenu);
-				invalidateOptionsMenu(); // creates call to onPrepareoptions
-											// menu
-				if (((String) getActionBar().getTitle())
-						.equalsIgnoreCase("All Courses")) {
-					refresh(0);
-					toast("refresh 0");
-				}
-				if (((String) getActionBar().getTitle())
-						.equalsIgnoreCase("Last Course")) {
-					refresh(1);
-					toast("refresh 2");
-				}
-				if (((String) getActionBar().getTitle())
-						.equalsIgnoreCase("Last Alumn")) {
-					refresh(2);
-					toast("refresh 3");
+		Tab = (ViewPager) findViewById(R.id.pager);
+		Tab.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
+			@Override
+			public void onPageSelected(int position) {
+
+				actionBar = getActionBar();
+				actionBar.setSelectedNavigationItem(position);
+			}
+		});
+		Tab.setAdapter(TabAdapter);
+
+		actionBar = getActionBar();
+		// Enable Tabs on Action Bar
+		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
+		ActionBar.TabListener tabListener = new ActionBar.TabListener() {
+
+			@Override
+			public void onTabReselected(android.app.ActionBar.Tab tab,
+					FragmentTransaction ft) {
+				refresh(tab.getPosition());
+
+			}
+
+			@Override
+			public void onTabSelected(ActionBar.Tab tab, FragmentTransaction ft) {
+				if (tab.getPosition() == 1 && lastCourse == null) {
+					Tab.setCurrentItem(0);
+					toast("Seleccione un curso");
+				} else {
+					if (tab.getPosition() == 2 && lastAlumn == null) {
+						Tab.setCurrentItem(0);
+						toast("Seleccione un alumno");
+					} else {
+						try {
+							refresh(tab.getPosition());
+
+						} catch (Exception e) {
+							System.out.println("No es posible refrescar");
+						}
+						Tab.setCurrentItem(tab.getPosition());
+						if (Tab.getCurrentItem() == 0) {
+							setTitle("Tus Cursos");
+						}
+						if (Tab.getCurrentItem() == 1) {
+							setTitle(lastCourse.getCurso());
+						}
+						if (Tab.getCurrentItem() == 2) {
+							setTitle(lastAlumn.getNombre());
+						}
+					}
 				}
 
 			}
 
-			public void onDrawerOpened(View drawerView) {
-				getActionBar().setTitle(tituloDelLienzo);
-				invalidateOptionsMenu(); // creates call to
-											// onPrepareOptionsMenu()
+			@Override
+			public void onTabUnselected(android.app.ActionBar.Tab tab,
+					FragmentTransaction ft) {
+				// TODO Auto-generated method stub
+
 			}
 		};
-		dondeDibujar.setDrawerListener(navDrawToggle);
-
-		if (savedInstanceState == null) {
-			selectItem(0);
-		}
-
+		// Add New Tab
+		actionBar.addTab(actionBar.newTab().setText("Cursos")
+				.setTabListener(tabListener));
+		actionBar.addTab(actionBar.newTab().setText("Último Curso")
+				.setTabListener(tabListener));
+		actionBar.addTab(actionBar.newTab().setText("Último Alumno")
+				.setTabListener(tabListener));
 	}
 
 	@Override
@@ -518,20 +512,6 @@ public class MainActivity extends Activity {
 		MenuInflater inflater = getMenuInflater();
 		inflater.inflate(R.menu.main, menu);
 
-		if (((String) getActionBar().getTitle())
-				.equalsIgnoreCase("All Courses")) {
-			refresh(0);
-			toast("refresh 0");
-		}
-		if (((String) getActionBar().getTitle())
-				.equalsIgnoreCase("Last Course")) {
-			refresh(1);
-			toast("refresh 2");
-		}
-		if (((String) getActionBar().getTitle()).equalsIgnoreCase("Last Alumn")) {
-			refresh(2);
-			toast("refresh 3");
-		}
 		return super.onCreateOptionsMenu(menu);
 	}
 
@@ -540,36 +520,30 @@ public class MainActivity extends Activity {
 	public boolean onPrepareOptionsMenu(Menu menu) {
 		// Cuando abris o cerras el nav draw se esconde o aparece el icono de
 		// search respectivamente
-		boolean drawerOpen = dondeDibujar.isDrawerOpen(listaNavDraw);
-		menu.findItem(R.id.action_websearch).setVisible(!drawerOpen);
-		menu.findItem(R.id.action_add).setVisible(!drawerOpen);
-		menu.findItem(R.id.action_export).setVisible(!drawerOpen);
-		menu.findItem(R.id.action_mail).setVisible(!drawerOpen);
-		if (((String) getActionBar().getTitle())
-				.equalsIgnoreCase("All Courses")) {
+		if (Tab.getCurrentItem() == 0) {
 			refresh(0);
-			toast("refresh 0");
 		}
-		if (((String) getActionBar().getTitle())
-				.equalsIgnoreCase("Last Course")) {
+		if (Tab.getCurrentItem() == 1) {
 			refresh(1);
-			toast("refresh 2");
 		}
-		if (((String) getActionBar().getTitle()).equalsIgnoreCase("Last Alumn")) {
+		if (Tab.getCurrentItem() == 2) {
 			refresh(2);
-			toast("refresh 3");
 		}
 		return super.onPrepareOptionsMenu(menu);
+
 	}
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		// The action bar home/up action should open or close the drawer.
-		// ActionBarDrawerToggle will take care of this.
-		if (navDrawToggle.onOptionsItemSelected(item)) {
-			return true;
+		if (Tab.getCurrentItem() == 0) {
+			refresh(0);
 		}
-		// Handle action buttons
+		if (Tab.getCurrentItem() == 1) {
+			refresh(1);
+		}
+		if (Tab.getCurrentItem() == 2) {
+			refresh(2);
+		}
 		switch (item.getItemId()) {
 		case R.id.action_websearch:
 			Intent intent = new Intent(this, Search.class);
@@ -581,15 +555,23 @@ public class MainActivity extends Activity {
 			return true;
 
 		case R.id.action_export:
-			if (((String) getActionBar().getTitle())
-					.equalsIgnoreCase("Last Course")) {
+			if (Tab.getCurrentItem() == 0) {
+				toast("Exportando Curso: " + lastCourse.getCurso());
 				PdfManager.crearPdfCurso(MainActivity.this, lastCourse);
 				PdfManager
 						.showPdfFile(lastCourse.getCurso(), MainActivity.this);
 
 			}
-			if (((String) getActionBar().getTitle())
-					.equalsIgnoreCase("Last Alumn")) {
+			if (Tab.getCurrentItem() == 1) {
+				toast("Exportando Curso: " + lastCourse.getCurso());
+				PdfManager.crearPdfCurso(MainActivity.this, lastCourse);
+				PdfManager
+						.showPdfFile(lastCourse.getCurso(), MainActivity.this);
+
+			}
+			if (Tab.getCurrentItem() == 2) {
+				toast("Exportando Alumno: " + lastAlumn.getNombre());
+				System.out.println(lastAlumn.getNombre());
 				PdfManager.crearPdfAlumno(MainActivity.this, lastCourse,
 						lastAlumn);
 				PdfManager
@@ -598,16 +580,24 @@ public class MainActivity extends Activity {
 			return true;
 
 		case R.id.action_mail:
-			if (((String) getActionBar().getTitle())
-					.equalsIgnoreCase("Last Course")) {
+			if (Tab.getCurrentItem() == 0) {
+				toast("Exportando Curso: " + lastCourse.getCurso());
 				PdfManager.crearPdfCurso(MainActivity.this, lastCourse);
 				PdfManager.sendPdfByEmail(lastCourse.getCurso(),
 						Properties.getMail(),
 						"Informe de " + lastCourse.getCurso(),
 						MainActivity.this);
 			}
-			if (((String) getActionBar().getTitle())
-					.equalsIgnoreCase("Last Alumn")) {
+			if (Tab.getCurrentItem() == 1) {
+				toast("Exportando Curso: " + lastCourse.getCurso());
+				PdfManager.crearPdfCurso(MainActivity.this, lastCourse);
+				PdfManager.sendPdfByEmail(lastCourse.getCurso(),
+						Properties.getMail(),
+						"Informe de " + lastCourse.getCurso(),
+						MainActivity.this);
+			}
+			if (Tab.getCurrentItem() == 2) {
+				toast("Exportando Alumno: " + lastAlumn.getNombre());
 				PdfManager.crearPdfAlumno(MainActivity.this, lastCourse,
 						lastAlumn);
 				PdfManager.sendPdfByEmail(lastAlumn.getNombre(),
@@ -617,17 +607,14 @@ public class MainActivity extends Activity {
 			}
 			return true;
 		case R.id.action_add:
-			if (((String) getActionBar().getTitle())
-					.equalsIgnoreCase("All Courses")) {
-				addCursoEvent(dondeDibujar);
+			if (Tab.getCurrentItem() == 0) {
+				addCursoEvent();
 			}
-			if (((String) getActionBar().getTitle())
-					.equalsIgnoreCase("Last Course")) {
-				addAlumnoEvent(dondeDibujar);
+			if (Tab.getCurrentItem() == 1) {
+				addAlumnoEvent();
 			}
-			if (((String) getActionBar().getTitle())
-					.equalsIgnoreCase("Last Alumn")) {
-				addNotaEvent(dondeDibujar);
+			if (Tab.getCurrentItem() == 2) {
+				addNotaEvent();
 			}
 			return true;
 		default:
@@ -635,97 +622,10 @@ public class MainActivity extends Activity {
 		}
 	}
 
-	/* The click listener for ListView in the navigation drawer */
-	private class DrawerItemClickListener implements
-			ListView.OnItemClickListener {
-		@Override
-		public void onItemClick(AdapterView<?> parent, View view, int position,
-				long id) {
-			selectItem(position);
-
-		}
-	}
-
-	private void selectItem(int position) {
-		// update the main content by replacing fragments
-		Fragment fragment = new VistaFragment();
-		Bundle args = new Bundle();
-		args.putInt(VistaFragment.ARG_ITEM_NUMBER, position);
-		fragment.setArguments(args);
-
-		FragmentManager fragmentManager = getFragmentManager();
-		fragmentManager.beginTransaction().replace(R.id.contenedor, fragment)
-				.commit();
-
-		// update selected item and title, then close the drawer
-		listaNavDraw.setItemChecked(position, true);
-		setTitle(itemsNavDraw[position]);
-		dondeDibujar.closeDrawer(listaNavDraw);
-
-	}
-
 	@Override
 	public void setTitle(CharSequence title) {
 		tituloDelMenu = title;
 		getActionBar().setTitle(tituloDelMenu);
-	}
-
-	/**
-	 * When using the ActionBarDrawerToggle, you must call it during
-	 * onPostCreate() and onConfigurationChanged()...
-	 */
-
-	@Override
-	protected void onPostCreate(Bundle savedInstanceState) {
-		super.onPostCreate(savedInstanceState);
-		// Sync the toggle state after onRestoreInstanceState has occurred.
-		navDrawToggle.syncState();
-	}
-
-	@Override
-	public void onConfigurationChanged(Configuration newConfig) {
-		super.onConfigurationChanged(newConfig);
-		// Pass any configuration change to the drawer toggls
-		navDrawToggle.onConfigurationChanged(newConfig);
-	}
-
-	/**
-	 * Fragment that appears in el lienzo, shows a layout
-	 */
-	public class VistaFragment extends Fragment {
-		public static final String ARG_ITEM_NUMBER = "item_number";
-
-		public VistaFragment() {
-			// Empty constructor required for fragment subclasses
-		}
-
-		@Override
-		public View onCreateView(LayoutInflater inflater, ViewGroup container,
-				Bundle savedInstanceState) {
-			int i = getArguments().getInt(ARG_ITEM_NUMBER);
-			String seccion = getResources().getStringArray(R.array.items_array)[i];
-			View rootView = null;
-			switch (i) {
-			case 0:
-				rootView = inflater.inflate(R.layout.fragment_cursos_todos,
-						container, false);
-
-				break;
-			case 1:
-				rootView = inflater.inflate(R.layout.fragment_ultimo_curso,
-						container, false);
-				break;
-			case 2:
-				rootView = inflater.inflate(R.layout.fragment_ultimo_alumno,
-						container, false);
-				break;
-
-			}
-
-			getActivity().setTitle(seccion);
-
-			return rootView;
-		}
 	}
 
 	public class agregarCursoDialogo extends DialogFragment {
@@ -856,7 +756,7 @@ public class MainActivity extends Activity {
 								public void onClick(DialogInterface dialog,
 										int id) {
 									if (spinner.getSelectedItem() == null) {
-										toast("null wacho");
+										toast("No hay nota seleccionada");
 									}
 
 									boolean carga = addNota(new Nota(

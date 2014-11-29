@@ -17,7 +17,7 @@ public abstract class Properties {
 			"Agrega el prefijo chucho, ej: \"chucholas\"",
 			"Agrega el sufijo ossio , ej: \"Sanchossio\"" };
 	static private int[] notas = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
-	static public String mail;
+	static public String mail = "mateodemayo@gmail.com";
 	static int seleccion = 0;
 	static public boolean firsTime = true;
 	static boolean openNota = false;

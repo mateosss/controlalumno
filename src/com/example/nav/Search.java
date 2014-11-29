@@ -6,7 +6,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.AdapterViewFlipper;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.SearchView;
@@ -96,13 +95,10 @@ public class Search extends Activity {
 									View arg1, int position, long arg3) {
 								int posicionCurso = posCursosRes[position];
 								Properties.setLastCourse(Properties.getCursos()[posicionCurso]);
-								System.out
-										.println("SELECTED"
-												+ Properties.getLastCourse()
-														.getCurso());
+							
 								Properties.setFirsTime(true);
 								Properties.setSeleccion(1);
-
+								
 								finish();
 							}
 
