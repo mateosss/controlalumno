@@ -1,3 +1,4 @@
+//clase logica que maneja el objeto nota que se encuentra dentro del objeto historial
 package com.example.nav;
 
 import java.io.Serializable;

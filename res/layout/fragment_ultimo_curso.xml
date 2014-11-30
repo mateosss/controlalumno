@@ -5,9 +5,10 @@
 
     <TextView
         android:id="@+id/TIUltimoCurso"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Último Curso"
+        android:gravity="center_vertical|center_horizontal"
+        android:text="@string/ultimo_curso"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <ListView

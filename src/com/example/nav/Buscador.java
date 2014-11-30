@@ -1,5 +1,8 @@
 package com.example.nav;
 
+//clase logica encargada de la busqueda, mandando strings devuelve 
+//un array con los cursos y alumnos que coinciden con la busqueda,
+//además de sus respectivas posiciones
 import java.util.Locale;
 
 public class Buscador {
@@ -14,16 +17,13 @@ public class Buscador {
 		for (int i = 0; i < cursos.length; i++) {
 			if (cursos[i].getCurso().toLowerCase(Locale.getDefault())
 					.startsWith(busMin)) {
-				System.out.println("BUSQUEDA CURSO:" + cursos[i].getCurso());
 				addCurso(cursos[i], i);
 			}
 			for (int j = 0; j < cursos[i].getAlumnos().length; j++) {
 
 				if (cursos[i].getAlumnos()[j].getNombre()
 						.toLowerCase(Locale.getDefault()).startsWith(busMin)) {
-					System.out.println("BUSQUEDA ALUMNO:"
-							+ cursos[i].getAlumnos()[j].getNombre());
-					addAlumno(cursos[i].getAlumnos()[j], i , j);
+					addAlumno(cursos[i].getAlumnos()[j], i, j);
 				}
 			}
 		}
@@ -61,7 +61,6 @@ public class Buscador {
 		posAlumnosAux[posAlumnosAux.length - 1][0] = curso;
 		posAlumnosAux[posAlumnosAux.length - 1][1] = pos;
 
-		
 		alumnosRet = alumnosAux;
 		posAlumnos = posAlumnosAux;
 	}

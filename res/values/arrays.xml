@@ -13,6 +13,20 @@
         <item>9</item>
         <item>10</item>
     </string-array>
+    
+    <string-array name="notas_predeterminadas">
+        <item>Muy mal desempeño -</item>
+        <item>Muy mal desempeño +</item>
+        <item>Mal desempeño -</item>
+        <item>Mal desempeño +</item>
+        <item>Desempeño regular -</item>
+        <item>Desempeño regular +</item>
+        <item>Buen desempeño -</item>
+        <item>Buen desempeño +</item>
+        <item>Muy buen desempeño</item>
+        <item>Excelente desempeño</item>
+    </string-array>
+    
     <string-array name="arrayConfig">
         <item>Editar notas predeterminadas</item>
         <item>Editar mail predeterminado</item>

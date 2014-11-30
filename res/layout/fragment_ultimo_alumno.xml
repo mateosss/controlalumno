@@ -6,47 +6,49 @@
 
     <TextView
         android:id="@+id/TIInfoBasica"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Información Básica"
+        android:gravity="center_vertical|center_horizontal"
+        android:text="@string/informacion_basica"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <TextView
         android:id="@+id/alumno"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Último Alumno" />
+        android:text="@string/ultimo_alumno" />
 
     <TextView
         android:id="@+id/notamax"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Nota Máxima" />
+        android:text="@string/nota_max" />
 
     <TextView
         android:id="@+id/notamin"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Nota Mínima" />
+        android:text="@string/nota_min" />
 
     <TextView
         android:id="@+id/estado"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginRight="41dp"
-        android:text="Estado General" />
+        android:text="@string/estado" />
 
     <TextView
         android:id="@+id/promedio"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Promedio" />
+        android:text="@string/promedio" />
 
     <TextView
         android:id="@+id/TIGraficoNotas"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Gráfico de Notas"
+        android:gravity="center_vertical|center_horizontal"
+        android:text="@string/grafico_de_notas"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <Button
@@ -54,13 +56,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:onClick="mostrarGrafico"
-        android:text="Ver Gráfico" />
+        android:text="@string/boton_grafico" />
 
     <TextView
         android:id="@+id/TIhistorialdenotas"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Historial de Notas"
+        android:gravity="center_vertical|center_horizontal"
+        android:text="@string/historial_de_notas"
         android:textAppearance="?android:attr/textAppearanceLarge" >
     </TextView>
 

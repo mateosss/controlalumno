@@ -1,3 +1,6 @@
+//clase de la vista de configuraciones puede
+//iniciarse como configuraciones normales o como
+//el editor de notas si la propiedad openNota es true
 package com.example.nav;
 
 import android.animation.LayoutTransition;
@@ -29,7 +32,7 @@ public class Settings extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.settings);
 		getActionBar().setDisplayHomeAsUpEnabled(false);
-		
+
 		if (Properties.isOpenNota()) {
 			Properties.setOpenNota(false);
 			makeNotas();
@@ -53,20 +56,22 @@ public class Settings extends Activity {
 			});
 		}
 	}
-
+	//muestra el fragment about
 	public void makeAbout() {
 		setContentView(R.layout.about);
 	}
-
+	//muestra un dialogo para editar el mail
 	public void makeChangeMail() {
 		CambiarMail dialogo = new CambiarMail();
 		FragmentManager fragmentManager = getFragmentManager();
-		dialogo.show(fragmentManager, "Nuevo Mail");
+		dialogo.show(fragmentManager,
+				getResources().getString(R.string.nuevo_mail));
 	}
-
+	//muestra el editor de notas
 	public void makeNotas() {
 		setContentView(R.layout.notas_edit);
-		getActionBar().setTitle("Edición de Notas");
+		getActionBar().setTitle(
+				getResources().getString(R.string.edicion_de_notas));
 		final EditText textIn = (EditText) findViewById(R.id.textin);
 		final Spinner notaIn = (Spinner) findViewById(R.id.notain);
 		Button buttonAdd = (Button) findViewById(R.id.add);
@@ -191,8 +196,10 @@ public class Settings extends Activity {
 					.findViewById(R.id.input);
 			mail1.setText(Properties.getMail());
 			builder.setView(agregarAlumnoDialog)
-					.setMessage("Inserte Nuevo Mail")
-					.setPositiveButton("Aceptar",
+					.setMessage(getResources()
+							.getString(R.string.inserte_nuevo_mail))
+					.setPositiveButton(getResources()
+							.getString(R.string.aceptar),
 							new DialogInterface.OnClickListener() {
 								public void onClick(DialogInterface dialog,
 										int id) {
@@ -202,7 +209,8 @@ public class Settings extends Activity {
 
 								}
 							})
-					.setNegativeButton("Cancelar",
+					.setNegativeButton(getResources()
+							.getString(R.string.cancelar),
 							new DialogInterface.OnClickListener() {
 								public void onClick(DialogInterface dialog,
 										int id) {

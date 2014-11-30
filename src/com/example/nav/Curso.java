@@ -1,3 +1,4 @@
+//clase logica que maneja los datos del objeto curso
 package com.example.nav;
 
 import java.io.Serializable;
@@ -44,9 +45,7 @@ public class Curso implements Serializable{
 		
 		Alumno[] alumnoAux = new Alumno[alumnos.length - 1];
 		int borrar = 0;
-		System.out.println("1 wacho");
 		for (int i = 0; i < alumnos.length; i++) {
-			System.out.println("i "+i);
 			if (alumnos[i].getNombre().equalsIgnoreCase(nombresillo)) {
 				borrar++;
 			} else {

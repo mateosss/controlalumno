@@ -1,3 +1,6 @@
+//vista de busqueda, implementa la clase logica buscador, 
+//y se encarga de mostrar los resultados de buscador y de al
+//seleccionarlos que se seleccionen en la main activity
 package com.example.nav;
 
 import android.app.Activity;
@@ -28,12 +31,12 @@ public class Search extends Activity {
 		MenuItem searchItem = menu.findItem(R.id.action_search);
 		SearchView mSearchView;
 		mSearchView = (SearchView) searchItem.getActionView();
-		mSearchView.setQueryHint("Search...");
+		mSearchView
+				.setQueryHint(getResources().getString(R.string.search_hint));
 		mSearchView.setOnQueryTextListener(new OnQueryTextListener() {
 
 			@Override
 			public boolean onQueryTextSubmit(String text) {
-				System.out.println("Searching for " + text);
 				return false;
 			}
 
@@ -51,11 +54,14 @@ public class Search extends Activity {
 				String[] listaAlumnosString = new String[alumnosRes.length];
 				String[] listaCursosString = new String[cursosRes.length];
 				for (int i = 0; i < alumnosRes.length; i++) {
-					listaAlumnosString[i] = "ALUMNO: "
+					listaAlumnosString[i] = getResources().getString(
+							R.string.alumno_resultado)
 							+ alumnosRes[i].getNombre();
 				}
 				for (int i = 0; i < cursosRes.length; i++) {
-					listaCursosString[i] = "CURSO: " + cursosRes[i].getCurso();
+					listaCursosString[i] = getResources().getString(
+							R.string.curso_resultado)
+							+ cursosRes[i].getCurso();
 				}
 				ArrayAdapter<String> adaptadorAlumnos = new ArrayAdapter<String>(
 						Search.this, android.R.layout.simple_list_item_1,
@@ -76,10 +82,6 @@ public class Search extends Activity {
 								Properties
 										.setLastAlumn(Properties
 												.getLastCourse().getAlumnos()[posicionAlumno]);
-								System.out
-										.println("SELECTED" 
-												+ Properties.getLastAlumn()
-														.getNombre() + "on COURSE "+ Properties.getLastCourse().getCurso());
 								Properties.setFirsTime(true);
 								Properties.setSeleccion(2);
 								finish();
@@ -95,10 +97,10 @@ public class Search extends Activity {
 									View arg1, int position, long arg3) {
 								int posicionCurso = posCursosRes[position];
 								Properties.setLastCourse(Properties.getCursos()[posicionCurso]);
-							
+
 								Properties.setFirsTime(true);
 								Properties.setSeleccion(1);
-								
+
 								finish();
 							}
 

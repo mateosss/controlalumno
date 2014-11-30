@@ -1,3 +1,4 @@
+//clase logica encargada de manejar los datos de un objeto alumno
 package com.example.nav;
 
 import java.io.Serializable;

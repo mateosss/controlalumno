@@ -1,3 +1,5 @@
+//clase fragment que se setea en las tabs
+
 package com.example.nav;
 
 import android.support.v4.app.Fragment;

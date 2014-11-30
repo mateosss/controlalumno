@@ -4,7 +4,7 @@
         android:id="@+id/action_add"
         android:icon="@drawable/ic_action_new"
         android:showAsAction="always"
-        android:title="Agregar"/>
+        android:title="@string/agregar"/>
     <item
         android:id="@+id/action_websearch"
         android:icon="@drawable/ic_action_search"
@@ -20,11 +20,11 @@
         android:id="@+id/action_export"
         android:icon="@drawable/ic_action_exportar"
         android:showAsAction="ifRoom"
-        android:title="Exportar a Pdf"/>
+        android:title="@string/action_exportar_pdf"/>
     <item
         android:id="@+id/action_mail"
         android:icon="@drawable/ic_action_email"
         android:showAsAction="ifRoom"
-        android:title="Enviar por Email"/>
+        android:title="@string/action_enviar_mail"/>
 
 </menu>

@@ -1,3 +1,4 @@
+//función copiada y pegada de ITSaChat, se encarga de guardar/cargar un array de objetos
 package com.example.nav;
 
 import java.io.File;
@@ -24,14 +25,14 @@ public abstract class SaveLoad {
 		salida.writeObject(datos);
 		salida.flush();
 		salida.close();
-		System.out.println("se guardo supuestamente");
 	}
 
 	public static Object[] load() throws IOException, ClassNotFoundException {
 		try {
 			File tarjeta = Environment.getExternalStorageDirectory();
 			ObjectInputStream entrada = new ObjectInputStream(
-					new FileInputStream(tarjeta.getAbsolutePath() + "/" + archivo));
+					new FileInputStream(tarjeta.getAbsolutePath() + "/"
+							+ archivo));
 			Object[] datos = (Object[]) entrada.readObject();
 			entrada.close();
 			return datos;

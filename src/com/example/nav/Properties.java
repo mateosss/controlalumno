@@ -1,3 +1,6 @@
+//clase muy importante se encarga de guardar datos que son de uso común en las otras clases
+//un medio muy efectivo para pasar datos rapidamente
+//se guardan aquí los datos más importantes, tiene además las funciones para guardar en disco
 package com.example.nav;
 
 import java.io.IOException;
@@ -7,20 +10,24 @@ public abstract class Properties {
 	static public Curso[] cursos = new Curso[0];
 	static public Curso lastCourse = null;
 	static public Alumno lastAlumn = null;
-	static private String[] observaciones = {
-			"Consume Drogas ilegales en clase",
-			"No Consume Drogas ilegales en clase",
-			"Le pega un \"Tubaso\" a su compañero, y no estoy hablando de una llamada",
-			"Le gusta rengar", "Dice \" Hola\" reiteradamente", "Flatulencia",
-			"Tira un monitor a la cabeza de su compañero",
-			"Agrega el prefijo perr , ej: \"perranchez\"",
-			"Agrega el prefijo chucho, ej: \"chucholas\"",
-			"Agrega el sufijo ossio , ej: \"Sanchossio\"" };
+	static private String[] observaciones = { "Muy mal desempeño -",
+			"Muy mal desempeño +", "Mal desempeño -", "Mal desempeño +",
+			"Desempeño regular -", "Desempeño regular +", "Buen desempeño -",
+			"Buen desempeño +", "Muy buen desempeño", "Excelente desempeño" };
 	static private int[] notas = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
 	static public String mail = "mateodemayo@gmail.com";
 	static int seleccion = 0;
 	static public boolean firsTime = true;
 	static boolean openNota = false;
+	static boolean save = false;
+
+	public static boolean isSave() {
+		return save;
+	}
+
+	public static void setSave(boolean save) {
+		Properties.save = save;
+	}
 
 	public static int getSeleccion() {
 		return seleccion;
@@ -95,7 +102,6 @@ public abstract class Properties {
 	}
 
 	public static void save() {
-		System.out.println("TRATANDO DE GUARDAR");
 		Object[] datos = new Object[6];
 		datos[0] = cursos;
 		datos[1] = lastCourse;
@@ -106,7 +112,6 @@ public abstract class Properties {
 		try {
 
 			SaveLoad.save(datos);
-			System.out.println("CREO QUE GUARDO");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -114,11 +119,9 @@ public abstract class Properties {
 	}
 
 	public static void load() {
-		System.out.println("TRATANDO DE CARGAR");
 		try {
 			Object[] datos = SaveLoad.load();
 			if (datos != null) {
-				System.out.println("NO ES NULL VAMO CARAJO");
 				cursos = (Curso[]) datos[0];
 				lastCourse = (Curso) datos[1];
 				lastAlumn = (Alumno) datos[2];

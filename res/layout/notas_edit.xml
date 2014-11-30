@@ -19,24 +19,22 @@
             android:id="@+id/notain"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
             android:layout_weight="1"
             android:entries="@array/arrayNotas" />
 
         <EditText
             android:id="@+id/textin"
+            android:inputType="text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
             android:layout_weight="10" />
 
         <Button
             android:id="@+id/add"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
             android:layout_weight="1"
-            android:text="Agregar" />
+            android:text="@string/boton_agregar" />
     </LinearLayout>
 
     <LinearLayout
@@ -48,13 +46,13 @@
             android:id="@+id/cancelarNotas"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Cancelar" />
+            android:text="@string/cancelar" />
 
         <Button
             android:id="@+id/aceptarNotas"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Guardar" />
+            android:text="@string/guardar" />
     </LinearLayout>
 
     <ScrollView

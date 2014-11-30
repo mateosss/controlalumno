@@ -1,3 +1,4 @@
+//clase principal
 package com.example.nav;
 
 import java.util.Arrays;
@@ -35,25 +36,25 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class MainActivity extends FragmentActivity {
-	ViewPager Tab;
+	ViewPager Tab;// Las tabs
 	TabPagerAdapter TabAdapter;
 	ActionBar actionBar;
 	CharSequence tituloDelMenu;
 
-	private Curso[] cursos = new Curso[0];
-	private Curso lastCourse = null;
-	private Alumno lastAlumn = null;
-	private String[] observaciones = {
-			"Consume Drogas ilegales en clase",
-			"No Consume Drogas ilegales en clase",
-			"Le pega un \"Tubaso\" a su compañero, y no estoy hablando de una llamada",
-			"Le gusta rengar", "Dice \" Hola\" reiteradamente", "Flatulencia",
-			"Tira un monitor a la cabeza de su compañero",
-			"Agrega el prefijo perr , ej: \"perranchez\"",
-			"Agrega el prefijo chucho, ej: \"chucholas\"",
-			"Agrega el sufijo ossio , ej: \"Sanchossio\"" };
-	private int[] notas = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
+	private Curso[] cursos = new Curso[0];// toda la informaciómn (todos los
+											// cursos)
+	private Curso lastCourse = null;// el ultimo curso seleccionado
+	private Alumno lastAlumn = null;// el ultimo alumno seleccionado
+	private String[] observaciones = { "Muy mal desempeño -",
+			"Muy mal desempeño +", "Mal desempeño -", "Mal desempeño +",
+			"Desempeño regular -", "Desempeño regular +", "Buen desempeño -",
+			"Buen desempeño +", "Muy buen desempeño", "Excelente desempeño" };
+	private int[] notas = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };// observaciones y
+															// notas
+															// predeterminada
 
+	// metodo que se encarga de guardar las propiedades de la main activity en
+	// la clase abstracta properties, si es necesario las guarda en disco
 	public void saveProperties() {
 		Properties.setCursos(cursos);
 		Properties.setLastAlumn(lastAlumn);
@@ -61,9 +62,13 @@ public class MainActivity extends FragmentActivity {
 		Properties.setObservaciones(observaciones);
 		Properties.setNotas(notas);
 
-		Properties.save();
+		if (Properties.isSave()) {
+			Properties.save();
+		}
 	}
 
+	// metodo que se encarga de cargar los valores de la clase properties a la
+	// main activity
 	public void syncProperties() {
 		cursos = Properties.getCursos();
 		lastCourse = Properties.getLastCourse();
@@ -72,13 +77,16 @@ public class MainActivity extends FragmentActivity {
 		notas = Properties.getNotas();
 	}
 
+	// metodo que crea un dialogo con el grafico
 	public void mostrarGrafico(View view) {
 
 		mostrarGraficoDialogo dialogo = new mostrarGraficoDialogo();
 		FragmentManager fragmentManager = getFragmentManager();
-		dialogo.show(fragmentManager, "Grafico");
+		dialogo.show(fragmentManager, getResources()
+				.getString(R.string.grafico));
 	}
 
+	// metodo que abre configuraciones, si es necesario abre el editor de notas
 	public void openSettings(boolean openNota) {
 		Intent intent = new Intent(this, Settings.class);
 		if (openNota) {
@@ -87,67 +95,83 @@ public class MainActivity extends FragmentActivity {
 		startActivity(intent);
 	}
 
+	// mezcla los atributos observaciones y notas en un solo array para poder
+	// visualizarlo en el seleccionador de notas
 	public String[] makeNotas() {
 		String[] notasFinal = new String[notas.length + 1];
 		for (int i = 0; i < notas.length; i++) {
-			notasFinal[i] = notas[i] + " - " + observaciones[i];
+			notasFinal[i] = notas[i]
+					+ getResources().getString(R.string.separador)
+					+ observaciones[i];
 		}
-		notasFinal[notasFinal.length - 1] = "Editar notas...";
+		notasFinal[notasFinal.length - 1] = getResources().getString(
+				R.string.editar_notas);
 		return notasFinal;
 
 	}
 
+	// abre el dialogo para agregar un alumno
 	public void addAlumnoEvent() {
 		agregarAlumnoDialogo dialogo = new agregarAlumnoDialogo();
 		FragmentManager fragmentManager = getFragmentManager();
-		dialogo.show(fragmentManager, "Agregar Alumno");
+		dialogo.show(fragmentManager,
+				getResources().getString(R.string.agregar_alumno));
 	}
 
+	// abre el dialogo para agregar una nota
 	public void addNotaEvent() {
 		agregarNotaDialogo dialogo = new agregarNotaDialogo();
 		FragmentManager fragmentManager = getFragmentManager();
-		dialogo.show(fragmentManager, "Agregar Nota");
+		dialogo.show(fragmentManager,
+				getResources().getString(R.string.agregar_nota));
 
 	}
 
+	// abre el dialogo para agregar un curso
 	public void addCursoEvent() {
 		agregarCursoDialogo dialogo = new agregarCursoDialogo();
 		FragmentManager fragmentManager = getFragmentManager();
-		dialogo.show(fragmentManager, "Agregar Curso");
+		dialogo.show(fragmentManager,
+				getResources().getString(R.string.agregar_curso));
 
 	}
 
+	// metodo encargado de agregar un curso al array de cursos de esta clase
 	public boolean addCurso(Curso curso) {
 		Curso[] cursosAux = new Curso[cursos.length + 1];
 		for (int i = 0; i < cursos.length; i++) {
 			cursosAux[i] = cursos[i];
 			if (curso.getCurso().equalsIgnoreCase(cursosAux[i].getCurso())) {
-				toast("Error: Curso ya existente!");
+				toast(getResources().getString(R.string.error_curso_existente));
 				return false;
 			}
 		}
 		cursosAux[cursosAux.length - 1] = curso;
 		cursos = cursosAux;
-		toast("Agregado");
+		toast(getResources().getString(R.string.agregado));
 		return true;
 	}
 
+	// metodo encargado de agregar un alumno a un curso, mediante el uso de las
+	// clases logicas
 	public boolean addAlumno(Alumno alumno, Curso curso) {
 		boolean cargar = false;
 		for (int i = 0; i < cursos.length; i++) {
 			if (cursos[i].getCurso().equalsIgnoreCase((curso.getCurso()))) {
 				cargar = cursos[i].addAlumno(alumno);
-				toast("Alumno Cargado");
+				toast(getResources().getString(R.string.alumno_cargado));
 				break;
 			}
 		}
 		if (!cargar) {
-			toast("Error: Alumno ya existe");
+			toast(getResources().getString(R.string.error_alumno_existente));
 			return false;
 		}
 		return true;
 	}
 
+	// metodo encargado de agregar una nota a un alumno de un curso mediate las
+	// clases logicas
 	public boolean addNota(Nota nota, Alumno alumno, Curso curso) {
 
 		for (int i = 0; i < cursos.length; i++) {
@@ -156,12 +180,15 @@ public class MainActivity extends FragmentActivity {
 					if (cursos[i].getAlumnos()[j].getNombre().equalsIgnoreCase(
 							alumno.getNombre())) {
 						cursos[i].getAlumnos()[j].addNota(nota);
-						toast("Nota agregada");
+						toast(getResources().getString(R.string.nota_agregada));
 						return true;
 					} else {
 						if (j == cursos[i].getAlumnos().length - 1) {
-							toast("No se encuentra el alumno "
-									+ alumno.getNombre() + " en el curso "
+							toast(getResources().getString(
+									R.string.no_se_encuentra_el_alumno)
+									+ alumno.getNombre()
+									+ getResources().getString(
+											R.string.en_el_curso)
 									+ curso.getCurso());
 							return false;
 						}
@@ -169,17 +196,16 @@ public class MainActivity extends FragmentActivity {
 				}
 			}
 		}
-		toast("No se encuentra el curso " + curso.getCurso());
+		toast(getResources().getString(R.string.no_se_encuentra_el_curso)
+				+ curso.getCurso());
 		return false;
 	}
 
+	// carga los valores del grafico
 	public void cargarGrafico(XYPlot grafico, Number[] serie) {
-		for (int i = 0; i < serie.length; i++) {
-			System.out.println("PATOSIO");
-			System.out.println(serie[i] + "");
-		}
 		XYSeries series1 = new SimpleXYSeries(Arrays.asList(serie),
-				SimpleXYSeries.ArrayFormat.Y_VALS_ONLY, "Notas");
+				SimpleXYSeries.ArrayFormat.Y_VALS_ONLY, getResources()
+						.getString(R.string.notas));
 
 		LineAndPointFormatter series1Format = new LineAndPointFormatter(
 				Color.rgb(255, 255, 255), Color.rgb(0, 153, 204),
@@ -191,14 +217,14 @@ public class MainActivity extends FragmentActivity {
 
 	}
 
+	// el metodo central de la aplicacion se ejecuta muy seguido, se encarga de
+	// refrescar la lista que sea necesaria (de cursos, alumnos o notas), y
+	// darles los eventos del click y del click largo
 	public void refresh(int tipo) {
-		System.out.println("REFRESH");
 		String[] listaString = null;
 		ListView lista = null;
 
 		if (Properties.isFirsTime()) {
-			System.out.println("TIPO ES " + tipo + " y SELECCION ES "
-					+ Properties.getSeleccion());
 			tipo = Properties.getSeleccion();
 			Tab.setCurrentItem(tipo);
 			syncProperties();
@@ -213,10 +239,6 @@ public class MainActivity extends FragmentActivity {
 				listaString[i] = cursos[i].getCurso();
 			}
 			lista = (ListView) findViewById(R.id.cursos);
-			if (lista == null) {
-				System.out.println("lista es null");
-
-			}
 			ArrayAdapter<String> adaptador = new ArrayAdapter<String>(this,
 					android.R.layout.simple_list_item_1, listaString);
 			lista.setAdapter(adaptador);
@@ -230,6 +252,7 @@ public class MainActivity extends FragmentActivity {
 					Tab.setCurrentItem(1);
 
 					getActionBar().setTitle(cursos[position].getCurso());
+					Properties.setSave(true);
 					refresh(1);
 				}
 			});
@@ -237,7 +260,8 @@ public class MainActivity extends FragmentActivity {
 				@Override
 				public boolean onItemLongClick(AdapterView<?> arg0, View arg1,
 						int position, long arg3) {
-					toast("eliminado " + cursos[position].getCurso());
+					toast(getResources().getString(R.string.eliminado)
+							+ cursos[position].getCurso());
 
 					Curso[] cursosAux = new Curso[cursos.length - 1];
 					int borrar = 0;
@@ -251,6 +275,7 @@ public class MainActivity extends FragmentActivity {
 					}
 					cursos = cursosAux;
 					lastCourse = null;
+					Properties.setSave(true);
 					refresh(0);
 					return false;
 				}
@@ -262,7 +287,8 @@ public class MainActivity extends FragmentActivity {
 		else {
 			if (tipo == 1) {
 				if (lastCourse == null) {
-					toast("No hay curso seleccionado");
+					toast(getResources().getString(
+							R.string.no_hay_curso_seleccionado));
 				} else {
 					listaString = new String[lastCourse.getAlumnos().length];
 					for (int i = 0; i < listaString.length; i++) {
@@ -284,6 +310,8 @@ public class MainActivity extends FragmentActivity {
 									lastCourse.getAlumnos()[position]
 											.getNombre());
 							toast(lastCourse.getAlumnos()[position].getNombre());
+							Properties.setSave(true);
+
 							refresh(2);
 
 						}
@@ -292,7 +320,7 @@ public class MainActivity extends FragmentActivity {
 						@Override
 						public boolean onItemLongClick(AdapterView<?> arg0,
 								View arg1, int position, long arg3) {
-							toast("eliminado "
+							toast(getResources().getString(R.string.eliminado)
 									+ lastCourse.getAlumnos()[position]
 											.getNombre());
 							for (int i = 0; i < cursos.length; i++) {
@@ -303,6 +331,7 @@ public class MainActivity extends FragmentActivity {
 									cursos[i].deleteAlumno(lastCourse
 											.getAlumnos()[position].getNombre());
 									lastCourse = cursos[i];
+									Properties.setSave(true);
 									refresh(1);
 								}
 							}
@@ -314,24 +343,21 @@ public class MainActivity extends FragmentActivity {
 			} else {
 				if (tipo == 2) {
 					if (lastAlumn == null) {
-						toast("No hay alumno seleccionado");
-						// setContentView(R.layout.no_alumn_selected);
+						toast(getResources().getString(
+								R.string.no_hay_alumno_seleccionado));
 					} else {
 
 						listaString = new String[lastAlumn.getHistorial()
 								.getNotas().length];
 
 						for (int i = 0; i < listaString.length; i++) {
-
-							System.out.println(lastAlumn.getHistorial()
-									.getNotas()[i].getNota() + "");
-
 							listaString[(listaString.length - 1) - i] = lastAlumn
 									.getHistorial().getNotas()[i].getNota()
-									+ "\n Dia: "
+									+ getResources().getString(R.string.dia)
 									+ lastAlumn.getHistorial().getNotas()[i]
 											.getFecha()
-									+ "\n Observación: "
+									+ getResources().getString(
+											R.string.observacion)
 									+ lastAlumn.getHistorial().getNotas()[i]
 											.getAnotacion();
 						}
@@ -390,6 +416,7 @@ public class MainActivity extends FragmentActivity {
 										}
 									}
 								}
+								Properties.setSave(true);
 								refresh(2);
 								return false;
 							}
@@ -402,10 +429,18 @@ public class MainActivity extends FragmentActivity {
 						TextView promedio = (TextView) findViewById(R.id.promedio);
 						TextView estado = (TextView) findViewById(R.id.estado);
 						nombre.setText(lastAlumn.getNombre() + "");
-						notamax.setText("Nota Max: " + lastAlumn.getNotaMax());
-						notamin.setText("Nota Min: " + lastAlumn.getNotaMin());
-						promedio.setText("Promedio: " + lastAlumn.getPromedio());
-						estado.setText("Estado: " + lastAlumn.getEstado());
+						notamax.setText(getResources().getString(
+								R.string.nota_max)
+								+ lastAlumn.getNotaMax());
+						notamin.setText(getResources().getString(
+								R.string.nota_min)
+								+ lastAlumn.getNotaMin());
+						promedio.setText(getResources().getString(
+								R.string.promedio)
+								+ lastAlumn.getPromedio());
+						estado.setText(getResources()
+								.getString(R.string.estado)
+								+ lastAlumn.getEstado());
 					}
 				}
 			}
@@ -417,17 +452,21 @@ public class MainActivity extends FragmentActivity {
 		saveProperties();
 	}
 
+	// metodo para mostrar una notificacion toast
 	public void toast(String texto) {
 		Toast.makeText(this, texto, Toast.LENGTH_SHORT).show();
 	}
 
+	// metodo sobrescrito que se encarga de refrescar un tab cuando la
+	// aplicacion vuelve luego de ser pausada
 	@Override
 	protected void onResume() {
-		System.out.println("RESUMIDO GUACHO");
 		refresh(Tab.getCurrentItem());
 		super.onResume();
 	}
 
+	// metodo sobrescrito de inicio de la aplicacion, aca se crean las tabs
+	// ademas de cargar las propiedades en disco
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 
@@ -464,21 +503,25 @@ public class MainActivity extends FragmentActivity {
 			public void onTabSelected(ActionBar.Tab tab, FragmentTransaction ft) {
 				if (tab.getPosition() == 1 && lastCourse == null) {
 					Tab.setCurrentItem(0);
-					toast("Seleccione un curso");
+					toast(getResources()
+							.getString(R.string.seleccione_un_curso));
 				} else {
 					if (tab.getPosition() == 2 && lastAlumn == null) {
 						Tab.setCurrentItem(0);
-						toast("Seleccione un alumno");
+						toast(getResources().getString(
+								R.string.seleccione_un_alumno));
 					} else {
 						try {
 							refresh(tab.getPosition());
 
 						} catch (Exception e) {
-							System.out.println("No es posible refrescar");
+							System.out.println(getResources().getString(
+									R.string.no_es_posible_refrescar));
 						}
 						Tab.setCurrentItem(tab.getPosition());
 						if (Tab.getCurrentItem() == 0) {
-							setTitle("Tus Cursos");
+							setTitle(getResources().getString(
+									R.string.tus_cursos));
 						}
 						if (Tab.getCurrentItem() == 1) {
 							setTitle(lastCourse.getCurso());
@@ -499,14 +542,18 @@ public class MainActivity extends FragmentActivity {
 			}
 		};
 		// Add New Tab
-		actionBar.addTab(actionBar.newTab().setText("Cursos")
+		actionBar.addTab(actionBar.newTab()
+				.setText(getResources().getString(R.string.cursos))
 				.setTabListener(tabListener));
-		actionBar.addTab(actionBar.newTab().setText("Último Curso")
+		actionBar.addTab(actionBar.newTab()
+				.setText(getResources().getString(R.string.ultimo_curso))
 				.setTabListener(tabListener));
-		actionBar.addTab(actionBar.newTab().setText("Último Alumno")
+		actionBar.addTab(actionBar.newTab()
+				.setText(getResources().getString(R.string.ultimo_alumno))
 				.setTabListener(tabListener));
 	}
 
+	// metodo de creacion de la action bar
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		MenuInflater inflater = getMenuInflater();
@@ -533,6 +580,8 @@ public class MainActivity extends FragmentActivity {
 
 	}
 
+	// metodo que ocurre cuando se selecciona un item de la action bar, aquí se
+	// dirigen los eventso de cada botón
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		if (Tab.getCurrentItem() == 0) {
@@ -556,21 +605,24 @@ public class MainActivity extends FragmentActivity {
 
 		case R.id.action_export:
 			if (Tab.getCurrentItem() == 0) {
-				toast("Exportando Curso: " + lastCourse.getCurso());
+				toast(getResources().getString(R.string.exportando_curso)
+						+ lastCourse.getCurso());
 				PdfManager.crearPdfCurso(MainActivity.this, lastCourse);
 				PdfManager
 						.showPdfFile(lastCourse.getCurso(), MainActivity.this);
 
 			}
 			if (Tab.getCurrentItem() == 1) {
-				toast("Exportando Curso: " + lastCourse.getCurso());
+				toast(getResources().getString(R.string.exportando_curso)
+						+ lastCourse.getCurso());
 				PdfManager.crearPdfCurso(MainActivity.this, lastCourse);
 				PdfManager
 						.showPdfFile(lastCourse.getCurso(), MainActivity.this);
 
 			}
 			if (Tab.getCurrentItem() == 2) {
-				toast("Exportando Alumno: " + lastAlumn.getNombre());
+				toast(getResources().getString(R.string.exportando_alumno)
+						+ lastAlumn.getNombre());
 				System.out.println(lastAlumn.getNombre());
 				PdfManager.crearPdfAlumno(MainActivity.this, lastCourse,
 						lastAlumn);
@@ -581,29 +633,32 @@ public class MainActivity extends FragmentActivity {
 
 		case R.id.action_mail:
 			if (Tab.getCurrentItem() == 0) {
-				toast("Exportando Curso: " + lastCourse.getCurso());
+				toast(getResources().getString(R.string.exportando_curso)
+						+ lastCourse.getCurso());
 				PdfManager.crearPdfCurso(MainActivity.this, lastCourse);
 				PdfManager.sendPdfByEmail(lastCourse.getCurso(),
 						Properties.getMail(),
-						"Informe de " + lastCourse.getCurso(),
-						MainActivity.this);
+						getResources().getString(R.string.informe_de)
+								+ lastCourse.getCurso(), MainActivity.this);
 			}
 			if (Tab.getCurrentItem() == 1) {
-				toast("Exportando Curso: " + lastCourse.getCurso());
+				toast(getResources().getString(R.string.exportando_curso)
+						+ lastCourse.getCurso());
 				PdfManager.crearPdfCurso(MainActivity.this, lastCourse);
 				PdfManager.sendPdfByEmail(lastCourse.getCurso(),
 						Properties.getMail(),
-						"Informe de " + lastCourse.getCurso(),
-						MainActivity.this);
+						getResources().getString(R.string.informe_de)
+								+ lastCourse.getCurso(), MainActivity.this);
 			}
 			if (Tab.getCurrentItem() == 2) {
-				toast("Exportando Alumno: " + lastAlumn.getNombre());
+				toast(getResources().getString(R.string.exportando_alumno)
+						+ lastAlumn.getNombre());
 				PdfManager.crearPdfAlumno(MainActivity.this, lastCourse,
 						lastAlumn);
 				PdfManager.sendPdfByEmail(lastAlumn.getNombre(),
 						Properties.getMail(),
-						"Informe de " + lastAlumn.getNombre(),
-						MainActivity.this);
+						getResources().getString(R.string.informe_de)
+								+ lastAlumn.getNombre(), MainActivity.this);
 			}
 			return true;
 		case R.id.action_add:
@@ -621,13 +676,13 @@ public class MainActivity extends FragmentActivity {
 			return super.onOptionsItemSelected(item);
 		}
 	}
-
+	//setea el título de la action bar
 	@Override
 	public void setTitle(CharSequence title) {
 		tituloDelMenu = title;
 		getActionBar().setTitle(tituloDelMenu);
 	}
-
+	//clases para crear dialogos, se setean los eventos y demás
 	public class agregarCursoDialogo extends DialogFragment {
 		@Override
 		public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -638,8 +693,10 @@ public class MainActivity extends FragmentActivity {
 					R.layout.add_dialog, null);
 
 			builder.setView(agregarCursoDialog)
-					.setMessage("Agregue Curso")
-					.setPositiveButton("Aceptar",
+					.setMessage(
+							getResources().getString(R.string.agregar_curso))
+					.setPositiveButton(
+							getResources().getString(R.string.aceptar),
 							new DialogInterface.OnClickListener() {
 
 								public void onClick(DialogInterface dialog,
@@ -650,13 +707,12 @@ public class MainActivity extends FragmentActivity {
 											.toString();
 									Curso curso = new Curso(nombre);
 									boolean carga = addCurso(curso);
-									System.out
-											.println("---------------sadasdas--------asdas-d####_123123-12-3--a-ds-dsa-3-3-");
-
+									Properties.setSave(true);
 									refresh(0);
 								}
 							})
-					.setNegativeButton("Cancelar",
+					.setNegativeButton(
+							getResources().getString(R.string.cancelar),
 							new DialogInterface.OnClickListener() {
 								public void onClick(DialogInterface dialog,
 										int id) {
@@ -678,8 +734,10 @@ public class MainActivity extends FragmentActivity {
 					R.layout.add_dialog, null);
 
 			builder.setView(agregarAlumnoDialog)
-					.setMessage("Agregue Alumno")
-					.setPositiveButton("Aceptar",
+					.setMessage(
+							getResources().getString(R.string.agregar_curso))
+					.setPositiveButton(
+							getResources().getString(R.string.aceptar),
 							new DialogInterface.OnClickListener() {
 								public void onClick(DialogInterface dialog,
 										int id) {
@@ -689,10 +747,12 @@ public class MainActivity extends FragmentActivity {
 											.toString();
 									boolean carga = addAlumno(
 											new Alumno(nombre), lastCourse);
+									Properties.setSave(true);
 									refresh(1);
 								}
 							})
-					.setNegativeButton("Cancelar",
+					.setNegativeButton(
+							getResources().getString(R.string.cancelar),
 							new DialogInterface.OnClickListener() {
 								public void onClick(DialogInterface dialog,
 										int id) {
@@ -725,12 +785,7 @@ public class MainActivity extends FragmentActivity {
 						View view, int position, long id) {
 					if (position == makeNotas().length - 1) {
 						openSettings(true);
-
 						syncProperties();
-						for (int i = 0; i < Properties.getNotas().length; i++) {
-							System.out.println(Properties.getNotas()[i] + "");
-							System.out.println(notas[i] + "");
-						}
 						ArrayAdapter<String> adaptadorNuevo = new ArrayAdapter<String>(
 								agregarNotaDialog.getContext(),
 								android.R.layout.simple_spinner_item,
@@ -750,22 +805,27 @@ public class MainActivity extends FragmentActivity {
 				}
 			});
 			builder.setView(agregarNotaDialog);
-			builder.setMessage("Agregue Nota")
-					.setPositiveButton("Aceptar",
+			builder.setMessage(getResources().getString(R.string.agregar_nota))
+					.setPositiveButton(
+							getResources().getString(R.string.aceptar),
 							new DialogInterface.OnClickListener() {
 								public void onClick(DialogInterface dialog,
 										int id) {
 									if (spinner.getSelectedItem() == null) {
-										toast("No hay nota seleccionada");
+										toast(getResources()
+												.getString(
+														R.string.no_hay_nota_seleccionada));
 									}
 
 									boolean carga = addNota(new Nota(
 											new Date(), nota, anotacion),
 											lastAlumn, lastCourse);
+									Properties.setSave(true);
 									refresh(2);
 								}
 							})
-					.setNegativeButton("Cancelar",
+					.setNegativeButton(
+							getResources().getString(R.string.cancelar),
 							new DialogInterface.OnClickListener() {
 								public void onClick(DialogInterface dialog,
 										int id) {
@@ -792,14 +852,18 @@ public class MainActivity extends FragmentActivity {
 					R.layout.grafico, null);
 
 			builder.setView(mostrarGraficoDialog)
-					.setMessage("Gráfico de " + lastAlumn.getNombre())
-					.setPositiveButton("Aceptar",
+					.setMessage(
+							getResources().getString(R.string.grafico_de)
+									+ lastAlumn.getNombre())
+					.setPositiveButton(
+							getResources().getString(R.string.aceptar),
 							new DialogInterface.OnClickListener() {
 								public void onClick(DialogInterface dialog,
 										int id) {
 								}
 							})
-					.setNegativeButton("Cancelar",
+					.setNegativeButton(
+							getResources().getString(R.string.cancelar),
 							new DialogInterface.OnClickListener() {
 								public void onClick(DialogInterface dialog,
 										int id) {

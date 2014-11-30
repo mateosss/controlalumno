@@ -1,5 +1,5 @@
 package com.example.nav;
-
+//adapter para las tabs
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;

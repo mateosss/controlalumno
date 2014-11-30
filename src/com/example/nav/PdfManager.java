@@ -1,3 +1,4 @@
+//clase encargada de manejar todo lo relacionado al pdf
 package com.example.nav;
 
 import android.content.ActivityNotFoundException;
@@ -30,8 +31,6 @@ import java.util.Date;
 
 public abstract class PdfManager {
 	private static Context mContext;
-	private static final String APP_FOLDER_NAME = "com.example.nav";
-	private static final String INVOICES = "Invoices";
 	private static Font catFont;
 	private static Font subFont;
 	private static Font smallBold;
@@ -41,11 +40,11 @@ public abstract class PdfManager {
 	private static BaseFont unicode;
 	private static File fontFile = new File("assets/fonts/arialuni.ttf");
 
-	// Constructor set fonts and get context
+	// Constructor
 	public PdfManager(Context context) throws IOException, DocumentException {
 
 	}
-
+	//crea el directorio y el archivo a guardar o lo sobrescribe en su defecto
 	private static String createDirectoryAndFileName(String nombre) {
 
 		String FILENAME = nombre + ".pdf";
@@ -55,7 +54,6 @@ public abstract class PdfManager {
 				.toString();
 		File pdfDir = new File(extStorageDirectory + File.separator);
 
-		// Creamos la carpeta "com.movalink.pdf" y la subcarpeta "Invoice"
 		try {
 			if (!pdfDir.exists()) {
 				pdfDir.mkdir();
@@ -74,16 +72,14 @@ public abstract class PdfManager {
 		}
 		return fullFileName;
 	}
-
+	//agrega una linea vacía al pdf
 	private static void addEmptyLine(Paragraph paragraph, int number) {
 		for (int i = 0; i < number; i++) {
 			paragraph.add(new Paragraph(" "));
 		}
 	}
-
+	//envia un intent para mostrar un archivo pdf
 	public static void showPdfFile(String fileName, Context context) {
-		Toast.makeText(context, "Leyendo documento", Toast.LENGTH_LONG).show();
-
 		String sdCardRoot = Environment.getExternalStorageDirectory().getPath();
 		String path = sdCardRoot + "/" + fileName + ".pdf";
 
@@ -96,11 +92,12 @@ public abstract class PdfManager {
 		try {
 			context.startActivity(intent);
 		} catch (ActivityNotFoundException e) {
-			Toast.makeText(context, "No Application Available to View PDF",
+			Toast.makeText(context,
+					context.getResources().getString(R.string.no_pdf),
 					Toast.LENGTH_SHORT).show();
 		}
 	}
-
+	//envia un intent para enviar un arhchivo pdf por mail
 	public static void sendPdfByEmail(String fileName, String emailTo,
 			String emailCC, Context context) {
 
@@ -108,19 +105,20 @@ public abstract class PdfManager {
 
 		emailIntent.putExtra(Intent.EXTRA_EMAIL, new String[] { emailTo });
 		emailIntent.putExtra(Intent.EXTRA_SUBJECT, emailCC);
-		emailIntent.putExtra(Intent.EXTRA_TEXT, "Informe generado por Nav");
+		emailIntent.putExtra(Intent.EXTRA_TEXT, context.getResources()
+				.getString(R.string.mail_text));
 
 		String sdCardRoot = Environment.getExternalStorageDirectory().getPath();
-		String fullFileName = sdCardRoot + File.separator +fileName+".pdf";
+		String fullFileName = sdCardRoot + File.separator + fileName + ".pdf";
 
 		Uri uri = Uri.fromFile(new File(fullFileName));
 		emailIntent.putExtra(Intent.EXTRA_STREAM, uri);
 		emailIntent.setType("application/pdf");
 
-		context.startActivity(Intent.createChooser(emailIntent,
-				"Send email using:"));
+		context.startActivity(Intent.createChooser(emailIntent, context
+				.getResources().getString(R.string.mail_toast)));
 	}
-
+	//crea un pdf con todo el formato de un alumno
 	public static void crearPdfAlumno(Context context, Curso curso,
 			Alumno alumno) {
 		try {
@@ -141,9 +139,13 @@ public abstract class PdfManager {
 				PdfWriter.getInstance(document, new FileOutputStream(
 						fullFileName));
 				document.open();
-				document.addTitle("Seguimiento de " + alumno.getNombre());
-				document.addSubject("Informe de Desempeño");
-				document.addKeywords("Seguimiento, Informe,"
+				document.addTitle(context.getResources().getString(
+						R.string.pdf_titulo)
+						+ alumno.getNombre());
+				document.addSubject(context.getResources().getString(
+						R.string.pdf_asunto));
+				document.addKeywords(context.getResources().getString(
+						R.string.pdf_keywords)
 						+ alumno.getNombre());
 				document.addAuthor(Properties.getMail());
 				document.addCreator(Properties.getMail());
@@ -160,17 +162,23 @@ public abstract class PdfManager {
 				Paragraph preface = new Paragraph();
 				addEmptyLine(preface, 1);
 				preface.add(new Paragraph(alumno.getNombre(), catFont));
-				preface.add(new Paragraph("Curso: " + curso.getCurso(),
-						italicFont));
-				preface.add(new Paragraph("Fecha: " + new Date().toString(),
-						italicFont));
-				preface.add(new Paragraph(
-						"Nota máxima: " + alumno.getNotaMax(), smallFont));
-				preface.add(new Paragraph(
-						"Nota mínima: " + alumno.getNotaMin(), smallFont));
-				preface.add(new Paragraph("Estado del Alumno: "
+				preface.add(new Paragraph(context.getResources().getString(
+						R.string.pdf_curso)
+						+ curso.getCurso(), italicFont));
+				preface.add(new Paragraph(context.getResources().getString(
+						R.string.pdf_fecha)
+						+ new Date().toString(), italicFont));
+				preface.add(new Paragraph(context.getResources().getString(
+						R.string.pdf_nota_maxima)
+						+ alumno.getNotaMax(), smallFont));
+				preface.add(new Paragraph(context.getResources().getString(
+						R.string.pdf_nota_minima)
+						+ alumno.getNotaMin(), smallFont));
+				preface.add(new Paragraph(context.getResources().getString(
+						R.string.pdf_estado)
 						+ alumno.getEstado(), smallFont));
-				preface.add(new Paragraph("Promedio General: "
+				preface.add(new Paragraph(context.getResources().getString(
+						R.string.pdf_promedio)
 						+ alumno.getPromedio(), smallFont));
 				addEmptyLine(preface, 1);
 				document.add(preface);
@@ -186,15 +194,18 @@ public abstract class PdfManager {
 				table.setWidthPercentage(100);
 
 				// Definimos los títulos para cada una de las 5 columnas
-				PdfPCell cell = new PdfPCell(new Phrase("Nota", smallBold));
+				PdfPCell cell = new PdfPCell(new Phrase(context.getResources()
+						.getString(R.string.pdf_nota), smallBold));
 				cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 				table.addCell(cell);
 
-				cell = new PdfPCell(new Phrase("Fecha", smallBold));
+				cell = new PdfPCell(new Phrase(context.getResources()
+						.getString(R.string.pdf_fecha1), smallBold));
 				cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 				table.addCell(cell);
 
-				cell = new PdfPCell(new Phrase("anotacion", smallBold));
+				cell = new PdfPCell(new Phrase(context.getResources()
+						.getString(R.string.pdf_anotacion), smallBold));
 				cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 				table.addCell(cell);
 
@@ -230,7 +241,8 @@ public abstract class PdfManager {
 				// /////////////////////
 				document.close();
 
-				Toast.makeText(mContext, "PDF Creado Satisfactoriamente",
+				Toast.makeText(mContext,
+						context.getResources().getString(R.string.pdf_toast),
 						Toast.LENGTH_SHORT).show();
 			}
 
@@ -238,7 +250,7 @@ public abstract class PdfManager {
 			e.printStackTrace();
 		}
 	}
-
+	//crea un pdf con todo el formato de un curso con cada alumno
 	public static void crearPdfCurso(Context context, Curso curso) {
 		try {
 			mContext = context;
@@ -258,9 +270,14 @@ public abstract class PdfManager {
 				PdfWriter.getInstance(document, new FileOutputStream(
 						fullFileName));
 				document.open();
-				document.addTitle("Seguimiento de " + curso.getCurso());
-				document.addSubject("Informe de Desempeño");
-				document.addKeywords("Seguimiento, Informe," + curso.getCurso());
+				document.addTitle(context.getResources().getString(
+						R.string.pdf_titulo)
+						+ curso.getCurso());
+				document.addSubject(context.getResources().getString(
+						R.string.pdf_asunto));
+				document.addKeywords(context.getResources().getString(
+						R.string.pdf_keywords)
+						+ curso.getCurso());
 				document.addAuthor(Properties.getMail());
 				document.addCreator(Properties.getMail());
 				// /////////////////////
@@ -276,15 +293,19 @@ public abstract class PdfManager {
 				Paragraph preface = new Paragraph();
 				addEmptyLine(preface, 1);
 				preface.add(new Paragraph(curso.getCurso(), catFont));
-				preface.add(new Paragraph("Cantidad de Alumnos: "
+				preface.add(new Paragraph(context.getResources().getString(
+						R.string.pdf_cantidad_de_alumnos)
 						+ curso.getAlumnos().length, italicFont));
-				preface.add(new Paragraph("Fecha: " + new Date().toString(),
-						italicFont));
+				preface.add(new Paragraph(context.getResources().getString(
+						R.string.pdf_fecha)
+						+ new Date().toString(), italicFont));
 
 				addEmptyLine(preface, 1);
-				preface.add(new Paragraph("Alumnos", italicFontBold));
+				preface.add(new Paragraph(context.getResources().getString(
+						R.string.pdf_alumnos), italicFontBold));
 				for (int i = 0; i < curso.getAlumnos().length; i++) {
-					preface.add(new Paragraph("- "
+					preface.add(new Paragraph(context.getResources().getString(
+							R.string.separador)
 							+ curso.getAlumnos()[i].getNombre(), italicFont));
 				}
 				addEmptyLine(preface, 1);
@@ -299,16 +320,22 @@ public abstract class PdfManager {
 					prefaceAlumn
 							.add(new Paragraph(alumno.getNombre(), catFont));
 					prefaceAlumn.add(new Paragraph(
-							"Curso: " + curso.getCurso(), catFont));
-					prefaceAlumn.add(new Paragraph("Fecha: "
+							context.getResources()
+							.getString(R.string.pdf_curso )+ curso.getCurso(), catFont));
+					prefaceAlumn.add(new Paragraph(context.getResources()
+							.getString(R.string.pdf_fecha)
 							+ new Date().toString(), italicFont));
-					prefaceAlumn.add(new Paragraph("Nota máxima: "
+					prefaceAlumn.add(new Paragraph(context.getResources()
+							.getString(R.string.pdf_nota_maxima)
 							+ alumno.getNotaMax(), smallFont));
-					prefaceAlumn.add(new Paragraph("Nota mínima: "
+					prefaceAlumn.add(new Paragraph(context.getResources()
+							.getString(R.string.pdf_nota_minima)
 							+ alumno.getNotaMin(), smallFont));
-					prefaceAlumn.add(new Paragraph("Estado del Alumno: "
+					prefaceAlumn.add(new Paragraph(context.getResources()
+							.getString(R.string.pdf_estado)
 							+ alumno.getEstado(), smallFont));
-					prefaceAlumn.add(new Paragraph("Promedio General: "
+					prefaceAlumn.add(new Paragraph(context.getResources()
+							.getString(R.string.pdf_promedio)
 							+ alumno.getPromedio(), smallFont));
 					addEmptyLine(prefaceAlumn, 1);
 					document.add(prefaceAlumn);
@@ -322,15 +349,18 @@ public abstract class PdfManager {
 					table.setWidthPercentage(100);
 
 					// Definimos los títulos para cada una de las 5 columnas
-					PdfPCell cell = new PdfPCell(new Phrase("Nota", smallBold));
+					PdfPCell cell = new PdfPCell(new Phrase(context.getResources()
+							.getString(R.string.pdf_nota), smallBold));
 					cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 					table.addCell(cell);
 
-					cell = new PdfPCell(new Phrase("Fecha", smallBold));
+					cell = new PdfPCell(new Phrase(context.getResources()
+							.getString(R.string.pdf_fecha1), smallBold));
 					cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 					table.addCell(cell);
 
-					cell = new PdfPCell(new Phrase("anotacion", smallBold));
+					cell = new PdfPCell(new Phrase(context.getResources()
+							.getString(R.string.pdf_anotacion), smallBold));
 					cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 					table.addCell(cell);
 
@@ -366,7 +396,8 @@ public abstract class PdfManager {
 				// /////////////////////
 				document.close();
 
-				Toast.makeText(mContext, "PDF Creado Satisfactoriamente",
+				Toast.makeText(mContext, context.getResources()
+						.getString(R.string.pdf_toast),
 						Toast.LENGTH_SHORT).show();
 			}
 
