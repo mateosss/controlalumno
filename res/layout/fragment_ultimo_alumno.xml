@@ -30,12 +30,25 @@
         android:layout_height="wrap_content"
         android:text="@string/nota_min" />
 
-    <TextView
-        android:id="@+id/estado"
+    <LinearLayout
+        android:id="@+id/estadoLayout"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginRight="41dp"
-        android:text="@string/estado" />
+        android:layout_height="wrap_content" >
+
+        <TextView
+            android:id="@+id/estado"
+            android:gravity="center_horizontal|center_vertical"
+            android:layout_gravity="center_vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/estado" />
+
+        <ImageView
+            android:id="@+id/estadoIM"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_regular" />
+    </LinearLayout>
 
     <TextView
         android:id="@+id/promedio"
@@ -70,7 +83,9 @@
     <ListView
         android:id="@+id/historial"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
+        android:layout_height="wrap_content"
+        android:animateLayoutChanges="true"
+        android:fastScrollEnabled="true" >
     </ListView>
 
 </LinearLayout>

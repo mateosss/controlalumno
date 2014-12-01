@@ -76,5 +76,10 @@
     <string name="agregar">Agregar</string>
     <string name="action_exportar_pdf">Exportar a PDF</string>
     <string name="action_enviar_mail">Enviar por Email</string>
+    <string name="excelente">Excelente</string>
+    <string name="bien">Bien</string>
+    <string name="regular">Regular</string>
+    <string name="mal">Mal</string>
+    <string name="muy_mal">Muy mal</string>
 
 </resources>

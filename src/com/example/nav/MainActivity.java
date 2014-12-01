@@ -4,11 +4,6 @@ package com.example.nav;
 import java.util.Arrays;
 import java.util.Date;
 
-import com.androidplot.xy.LineAndPointFormatter;
-import com.androidplot.xy.SimpleXYSeries;
-import com.androidplot.xy.XYPlot;
-import com.androidplot.xy.XYSeries;
-
 import android.app.ActionBar;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -30,10 +25,16 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.androidplot.xy.LineAndPointFormatter;
+import com.androidplot.xy.SimpleXYSeries;
+import com.androidplot.xy.XYPlot;
+import com.androidplot.xy.XYSeries;
 
 public class MainActivity extends FragmentActivity {
 	ViewPager Tab;// Las tabs
@@ -242,6 +243,7 @@ public class MainActivity extends FragmentActivity {
 			ArrayAdapter<String> adaptador = new ArrayAdapter<String>(this,
 					android.R.layout.simple_list_item_1, listaString);
 			lista.setAdapter(adaptador);
+
 			lista.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
 				@Override
@@ -422,12 +424,12 @@ public class MainActivity extends FragmentActivity {
 							}
 
 						});
-
 						TextView nombre = (TextView) findViewById(R.id.alumno);
 						TextView notamax = (TextView) findViewById(R.id.notamax);
 						TextView notamin = (TextView) findViewById(R.id.notamin);
 						TextView promedio = (TextView) findViewById(R.id.promedio);
 						TextView estado = (TextView) findViewById(R.id.estado);
+						ImageView estadoIM = (ImageView) findViewById(R.id.estadoIM);
 						nombre.setText(lastAlumn.getNombre() + "");
 						notamax.setText(getResources().getString(
 								R.string.nota_max)
@@ -438,9 +440,37 @@ public class MainActivity extends FragmentActivity {
 						promedio.setText(getResources().getString(
 								R.string.promedio)
 								+ lastAlumn.getPromedio());
-						estado.setText(getResources()
-								.getString(R.string.estado)
-								+ lastAlumn.getEstado());
+
+						if (lastAlumn.getEstado() == 5) {
+							estado.setText(getResources().getString(
+									R.string.estado)
+									+ getResources().getString(
+											R.string.excelente));
+							estadoIM.setImageResource(R.drawable.ic_muy_bien);
+						} else if (lastAlumn.getEstado() == 4) {
+							estado.setText(getResources().getString(
+									R.string.estado)
+									+ getResources().getString(R.string.bien));
+							estadoIM.setImageResource(R.drawable.ic_bien);
+						} else if (lastAlumn.getEstado() == 3) {
+							estado.setText(getResources().getString(
+									R.string.estado)
+									+ getResources()
+											.getString(R.string.regular));
+							estadoIM.setImageResource(R.drawable.ic_regular);
+						} else if (lastAlumn.getEstado() == 2) {
+							estado.setText(getResources().getString(
+									R.string.estado)
+									+ getResources().getString(R.string.mal));
+							estadoIM.setImageResource(R.drawable.ic_mal);
+						} else if (lastAlumn.getEstado() == 1) {
+							estado.setText(getResources().getString(
+									R.string.estado)
+									+ getResources()
+											.getString(R.string.muy_mal));
+							estadoIM.setImageResource(R.drawable.ic_muy_malpng);
+						}
+
 					}
 				}
 			}
@@ -473,9 +503,7 @@ public class MainActivity extends FragmentActivity {
 		Properties.load();
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-
 		TabAdapter = new TabPagerAdapter(getSupportFragmentManager());
-
 		Tab = (ViewPager) findViewById(R.id.pager);
 		Tab.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
 			@Override
@@ -551,6 +579,7 @@ public class MainActivity extends FragmentActivity {
 		actionBar.addTab(actionBar.newTab()
 				.setText(getResources().getString(R.string.ultimo_alumno))
 				.setTabListener(tabListener));
+
 	}
 
 	// metodo de creacion de la action bar
@@ -676,13 +705,15 @@ public class MainActivity extends FragmentActivity {
 			return super.onOptionsItemSelected(item);
 		}
 	}
-	//setea el título de la action bar
+
+	// setea el título de la action bar
 	@Override
 	public void setTitle(CharSequence title) {
 		tituloDelMenu = title;
 		getActionBar().setTitle(tituloDelMenu);
 	}
-	//clases para crear dialogos, se setean los eventos y demás
+
+	// clases para crear dialogos, se setean los eventos y demás
 	public class agregarCursoDialogo extends DialogFragment {
 		@Override
 		public Dialog onCreateDialog(Bundle savedInstanceState) {

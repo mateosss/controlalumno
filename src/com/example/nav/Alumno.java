@@ -3,7 +3,7 @@ package com.example.nav;
 
 import java.io.Serializable;
 
-public class Alumno implements Serializable{
+public class Alumno implements Serializable {
 
 	private int estado;
 	private String nombre;
@@ -13,71 +13,105 @@ public class Alumno implements Serializable{
 	Historial historial = new Historial();
 
 	public int getNotaMaxima() {
+		refresh();
 		return notaMaxima;
 	}
 
 	public void setNotaMaxima(int notaMaxima) {
 		this.notaMaxima = notaMaxima;
+		refresh();
+
 	}
 
 	public int getNotaMinima() {
+		refresh();
+
 		return notaMinima;
 	}
 
 	public void setNotaMinima(int notaMinima) {
 		this.notaMinima = notaMinima;
+		refresh();
+
 	}
 
 	public Historial getHistorial() {
+		refresh();
+
 		return historial;
 	}
 
 	public void setHistorial(Historial historial) {
 		this.historial = historial;
+		refresh();
+
 	}
 
 	public Alumno(String nombre) {
+
 		this.nombre = nombre;
+		refresh();
+
 	}
 
 	public String getNombre() {
+		refresh();
+
 		return nombre;
 	}
 
 	public void setNombre(String nombre) {
 		this.nombre = nombre;
+		refresh();
+
 	}
 
 	public int getNotaMax() {
+		refresh();
+
 		return notaMaxima;
 	}
 
 	public void setNotaMax(int notaMax) {
 		this.notaMaxima = notaMax;
+		refresh();
+
 	}
 
 	public int getNotaMin() {
+		refresh();
+
 		return notaMinima;
 	}
 
 	public void setNotaMin(int notaMin) {
 		this.notaMinima = notaMin;
+		refresh();
+
 	}
 
 	public float getPromedio() {
+		refresh();
+
 		return promedio;
 	}
 
 	public void setPromedio(float promedio) {
 		this.promedio = promedio;
+		refresh();
+
 	}
 
 	public int getEstado() {
+		refresh();
+
 		return estado;
 	}
 
 	public void setEstado(int estado) {
 		this.estado = estado;
+		refresh();
+
 	}
 
 	public boolean hasNota(Nota nota) {
@@ -136,7 +170,7 @@ public class Alumno implements Serializable{
 					} else {
 						if (prom >= 8.5) {
 							estado = 5;
-						}else {
+						} else {
 							estado = 0;
 						}
 					}
