@@ -17,11 +17,16 @@ public abstract class SaveLoad {
 
 	public static void save(Object[] datos) throws IOException {
 
-		File tarjeta = Environment.getExternalStorageDirectory();
-		File file = new File(tarjeta.getAbsolutePath() + "/" + archivo);
-		System.out.println(tarjeta.getAbsolutePath());
+		String tarjeta = Environment.getExternalStorageDirectory()
+				+ "/MisCursos";
+		File carpeta = new File(tarjeta + "/");
+		if (!carpeta.exists()) {
+			carpeta.mkdir();
+		}
+		File file = new File(tarjeta + "/" + archivo);
+		System.out.println(tarjeta + "/" + archivo);
 		ObjectOutputStream salida = new ObjectOutputStream(
-				new FileOutputStream(tarjeta.getAbsolutePath() + "/" + archivo));
+				new FileOutputStream(tarjeta + "/" + archivo));
 		salida.writeObject(datos);
 		salida.flush();
 		salida.close();
@@ -29,10 +34,13 @@ public abstract class SaveLoad {
 
 	public static Object[] load() throws IOException, ClassNotFoundException {
 		try {
-			File tarjeta = Environment.getExternalStorageDirectory();
+			String tarjeta = Environment.getExternalStorageDirectory()
+					+ "/MisCursos";
+			System.out.println(tarjeta + "/" + archivo);
+
 			ObjectInputStream entrada = new ObjectInputStream(
-					new FileInputStream(tarjeta.getAbsolutePath() + "/"
-							+ archivo));
+					new FileInputStream(tarjeta + "/" + archivo));
+
 			Object[] datos = (Object[]) entrada.readObject();
 			entrada.close();
 			return datos;

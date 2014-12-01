@@ -44,14 +44,15 @@ public abstract class PdfManager {
 	public PdfManager(Context context) throws IOException, DocumentException {
 
 	}
-	//crea el directorio y el archivo a guardar o lo sobrescribe en su defecto
+
+	// crea el directorio y el archivo a guardar o lo sobrescribe en su defecto
 	private static String createDirectoryAndFileName(String nombre) {
 
 		String FILENAME = nombre + ".pdf";
 		String fullFileName = "";
 		// Obtenemos el directorio raiz "/sdcard"
 		String extStorageDirectory = Environment.getExternalStorageDirectory()
-				.toString();
+				+ "/MisCursos";
 		File pdfDir = new File(extStorageDirectory + File.separator);
 
 		try {
@@ -59,8 +60,8 @@ public abstract class PdfManager {
 				pdfDir.mkdir();
 			}
 
-			fullFileName = Environment.getExternalStorageDirectory() + "/"
-					+ FILENAME;
+			fullFileName = Environment.getExternalStorageDirectory()
+					+ "/MisCursos" + "/" + FILENAME;
 
 			File outputFile = new File(fullFileName);
 
@@ -72,15 +73,18 @@ public abstract class PdfManager {
 		}
 		return fullFileName;
 	}
-	//agrega una linea vacía al pdf
+
+	// agrega una linea vacía al pdf
 	private static void addEmptyLine(Paragraph paragraph, int number) {
 		for (int i = 0; i < number; i++) {
 			paragraph.add(new Paragraph(" "));
 		}
 	}
-	//envia un intent para mostrar un archivo pdf
+
+	// envia un intent para mostrar un archivo pdf
 	public static void showPdfFile(String fileName, Context context) {
-		String sdCardRoot = Environment.getExternalStorageDirectory().getPath();
+		String sdCardRoot = Environment.getExternalStorageDirectory().getPath()
+				+ "/MisCursos";
 		String path = sdCardRoot + "/" + fileName + ".pdf";
 
 		File file = new File(path);
@@ -97,7 +101,8 @@ public abstract class PdfManager {
 					Toast.LENGTH_SHORT).show();
 		}
 	}
-	//envia un intent para enviar un arhchivo pdf por mail
+
+	// envia un intent para enviar un arhchivo pdf por mail
 	public static void sendPdfByEmail(String fileName, String emailTo,
 			String emailCC, Context context) {
 
@@ -108,7 +113,8 @@ public abstract class PdfManager {
 		emailIntent.putExtra(Intent.EXTRA_TEXT, context.getResources()
 				.getString(R.string.mail_text));
 
-		String sdCardRoot = Environment.getExternalStorageDirectory().getPath();
+		String sdCardRoot = Environment.getExternalStorageDirectory().getPath()
+				+ "/MisCursos";
 		String fullFileName = sdCardRoot + File.separator + fileName + ".pdf";
 
 		Uri uri = Uri.fromFile(new File(fullFileName));
@@ -118,7 +124,8 @@ public abstract class PdfManager {
 		context.startActivity(Intent.createChooser(emailIntent, context
 				.getResources().getString(R.string.mail_toast)));
 	}
-	//crea un pdf con todo el formato de un alumno
+
+	// crea un pdf con todo el formato de un alumno
 	public static void crearPdfAlumno(Context context, Curso curso,
 			Alumno alumno) {
 		try {
@@ -250,7 +257,8 @@ public abstract class PdfManager {
 			e.printStackTrace();
 		}
 	}
-	//crea un pdf con todo el formato de un curso con cada alumno
+
+	// crea un pdf con todo el formato de un curso con cada alumno
 	public static void crearPdfCurso(Context context, Curso curso) {
 		try {
 			mContext = context;
@@ -319,9 +327,9 @@ public abstract class PdfManager {
 					addEmptyLine(prefaceAlumn, 1);
 					prefaceAlumn
 							.add(new Paragraph(alumno.getNombre(), catFont));
-					prefaceAlumn.add(new Paragraph(
-							context.getResources()
-							.getString(R.string.pdf_curso )+ curso.getCurso(), catFont));
+					prefaceAlumn.add(new Paragraph(context.getResources()
+							.getString(R.string.pdf_curso) + curso.getCurso(),
+							catFont));
 					prefaceAlumn.add(new Paragraph(context.getResources()
 							.getString(R.string.pdf_fecha)
 							+ new Date().toString(), italicFont));
@@ -349,8 +357,9 @@ public abstract class PdfManager {
 					table.setWidthPercentage(100);
 
 					// Definimos los títulos para cada una de las 5 columnas
-					PdfPCell cell = new PdfPCell(new Phrase(context.getResources()
-							.getString(R.string.pdf_nota), smallBold));
+					PdfPCell cell = new PdfPCell(new Phrase(context
+							.getResources().getString(R.string.pdf_nota),
+							smallBold));
 					cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 					table.addCell(cell);
 
@@ -396,8 +405,8 @@ public abstract class PdfManager {
 				// /////////////////////
 				document.close();
 
-				Toast.makeText(mContext, context.getResources()
-						.getString(R.string.pdf_toast),
+				Toast.makeText(mContext,
+						context.getResources().getString(R.string.pdf_toast),
 						Toast.LENGTH_SHORT).show();
 			}
 
