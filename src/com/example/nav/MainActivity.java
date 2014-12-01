@@ -491,7 +491,12 @@ public class MainActivity extends FragmentActivity {
 	// aplicacion vuelve luego de ser pausada
 	@Override
 	protected void onResume() {
-		refresh(Tab.getCurrentItem());
+		try {
+			refresh(Tab.getCurrentItem());
+
+		} catch (Exception e) {
+			System.out.println("no podemos hacer el on resume refresh");
+		}
 		super.onResume();
 	}
 

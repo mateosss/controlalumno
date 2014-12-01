@@ -109,7 +109,7 @@ public class Search extends Activity {
 				return false;
 			}
 		});
-
+		searchItem.expandActionView();
 		return true;
 	}
 
