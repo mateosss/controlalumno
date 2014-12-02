@@ -771,7 +771,7 @@ public class MainActivity extends FragmentActivity {
 
 			builder.setView(agregarAlumnoDialog)
 					.setMessage(
-							getResources().getString(R.string.agregar_curso))
+							getResources().getString(R.string.agregar_alumno))
 					.setPositiveButton(
 							getResources().getString(R.string.aceptar),
 							new DialogInterface.OnClickListener() {
@@ -820,13 +820,10 @@ public class MainActivity extends FragmentActivity {
 				public void onItemSelected(AdapterView<?> adapterView,
 						View view, int position, long id) {
 					if (position == makeNotas().length - 1) {
+						
 						openSettings(true);
-						syncProperties();
-						ArrayAdapter<String> adaptadorNuevo = new ArrayAdapter<String>(
-								agregarNotaDialog.getContext(),
-								android.R.layout.simple_spinner_item,
-								makeNotas());
-						spinner.setAdapter(adaptadorNuevo);
+						dismiss();
+
 					} else {
 						nota = notas[position];
 						anotacion = observaciones[position];
