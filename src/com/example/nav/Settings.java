@@ -3,6 +3,10 @@
 //el editor de notas si la propiedad openNota es true
 package com.example.nav;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+
 import android.animation.LayoutTransition;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -12,6 +16,7 @@ import android.app.FragmentManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.os.Environment;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -49,25 +54,32 @@ public class Settings extends Activity {
 						makeChangeMail();
 					}
 					if (position == 2) {
+						
+					}
+					if (position == 3) {
 						makeAbout();
+
 					}
 
 				}
 			});
 		}
 	}
-	//muestra el fragment about
+
+	// muestra el fragment about
 	public void makeAbout() {
 		setContentView(R.layout.about);
 	}
-	//muestra un dialogo para editar el mail
+
+	// muestra un dialogo para editar el mail
 	public void makeChangeMail() {
 		CambiarMail dialogo = new CambiarMail();
 		FragmentManager fragmentManager = getFragmentManager();
 		dialogo.show(fragmentManager,
 				getResources().getString(R.string.nuevo_mail));
 	}
-	//muestra el editor de notas
+
+	// muestra el editor de notas
 	public void makeNotas() {
 		setContentView(R.layout.notas_edit);
 		getActionBar().setTitle(
@@ -196,10 +208,11 @@ public class Settings extends Activity {
 					.findViewById(R.id.input);
 			mail1.setText(Properties.getMail());
 			builder.setView(agregarAlumnoDialog)
-					.setMessage(getResources()
-							.getString(R.string.inserte_nuevo_mail))
-					.setPositiveButton(getResources()
-							.getString(R.string.aceptar),
+					.setMessage(
+							getResources().getString(
+									R.string.inserte_nuevo_mail))
+					.setPositiveButton(
+							getResources().getString(R.string.aceptar),
 							new DialogInterface.OnClickListener() {
 								public void onClick(DialogInterface dialog,
 										int id) {
@@ -209,8 +222,8 @@ public class Settings extends Activity {
 
 								}
 							})
-					.setNegativeButton(getResources()
-							.getString(R.string.cancelar),
+					.setNegativeButton(
+							getResources().getString(R.string.cancelar),
 							new DialogInterface.OnClickListener() {
 								public void onClick(DialogInterface dialog,
 										int id) {

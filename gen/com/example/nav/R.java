@@ -87,8 +87,9 @@ public final class R {
         public static final int aceptarNotas=0x7f0a0019;
         public static final int action_add=0x7f0a0023;
         public static final int action_export=0x7f0a0026;
+        public static final int action_import=0x7f0a0028;
         public static final int action_mail=0x7f0a0027;
-        public static final int action_search=0x7f0a0028;
+        public static final int action_search=0x7f0a0029;
         public static final int action_settings=0x7f0a0025;
         public static final int action_websearch=0x7f0a0024;
         public static final int add=0x7f0a0017;
@@ -146,6 +147,7 @@ public final class R {
         public static final int aceptar=0x7f070026;
         public static final int action_enviar_mail=0x7f07004b;
         public static final int action_exportar_pdf=0x7f07004a;
+        public static final int action_importar=0x7f070051;
         public static final int action_search=0x7f070001;
         public static final int action_settings=0x7f070002;
         public static final int agregado=0x7f070009;

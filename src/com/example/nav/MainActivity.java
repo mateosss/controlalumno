@@ -1,6 +1,9 @@
 //clase principal
 package com.example.nav;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
 import java.util.Arrays;
 import java.util.Date;
 
@@ -14,6 +17,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
@@ -109,6 +113,13 @@ public class MainActivity extends FragmentActivity {
 				R.string.editar_notas);
 		return notasFinal;
 
+	}
+
+	@Override
+	public void onBackPressed() {
+		Properties.setSeleccion(0);
+		Properties.setFirsTime(true);
+		refresh(0);
 	}
 
 	// abre el dialogo para agregar un alumno
@@ -500,6 +511,28 @@ public class MainActivity extends FragmentActivity {
 		super.onResume();
 	}
 
+	@Override
+	protected void onStart() {
+		try {
+			refresh(Tab.getCurrentItem());
+
+		} catch (Exception e) {
+			System.out.println("no podemos hacer el on resume refresh");
+		}
+		super.onStart();
+	}
+
+	@Override
+	protected void onRestart() {
+		try {
+			refresh(Tab.getCurrentItem());
+
+		} catch (Exception e) {
+			System.out.println("no podemos hacer el on resume refresh");
+		}
+		super.onRestart();
+	}
+
 	// metodo sobrescrito de inicio de la aplicacion, aca se crean las tabs
 	// ademas de cargar las propiedades en disco
 	@Override
@@ -631,7 +664,50 @@ public class MainActivity extends FragmentActivity {
 		case R.id.action_websearch:
 			Intent intent = new Intent(this, Search.class);
 			startActivity(intent);
+			return true;
+		case R.id.action_import:
+			File archivoT = null;
+			FileReader fr = null;
+			BufferedReader br = null;
+			// ///////////////
+			try {
+				// Apertura del fichero y creacion de BufferedReader para poder
+				// hacer una lectura comoda (disponer del metodo readLine()).
+				archivoT = new File(Environment.getExternalStorageDirectory()
+						+ "/cargar.txt");
+				fr = new FileReader(archivoT);
+				br = new BufferedReader(fr);
 
+				// Lectura del fichero
+				String linea;
+
+				while ((linea = br.readLine()) != null)
+					if (linea.startsWith("#")) {
+						Curso curso = new Curso(linea.split("#")[1]);
+						addCurso(curso);
+						lastCourse = curso;
+					} else {
+						Alumno alumno = new Alumno(linea);
+						lastCourse.addAlumno(alumno);
+						lastAlumn = alumno;
+					}
+			} catch (Exception e) {
+				e.printStackTrace();
+			} finally {
+				// En el finally cerramos el fichero, para asegurarnos
+				// que se cierra tanto si todo va bien como si salta
+				// una excepcion.
+				try {
+					if (null != fr) {
+						fr.close();
+					}
+				} catch (Exception e2) {
+					e2.printStackTrace();
+				}
+
+			}
+			saveProperties();
+			refresh(0);
 			return true;
 		case R.id.action_settings:
 			openSettings(false);
@@ -820,7 +896,7 @@ public class MainActivity extends FragmentActivity {
 				public void onItemSelected(AdapterView<?> adapterView,
 						View view, int position, long id) {
 					if (position == makeNotas().length - 1) {
-						
+
 						openSettings(true);
 						dismiss();
 

@@ -3,6 +3,7 @@
     <string name="app_name">"Nav"</string>
     <string name="action_search">"Buscar"</string>
     <string name="action_settings">"Configuraciones"</string>
+    <string name="action_importar">"Importar Mis Cursos"</string>
     <string name="grafico">"Grafico"</string>
     <string name="editar_notas">"Editar notas..."</string>
     <string name="agregar_alumno">"Agregar Alumno"</string>
